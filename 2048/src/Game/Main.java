@@ -6,7 +6,7 @@ public class Main {
 
 		Board test = new Board();
 		test.getTable()[0][0].setValue(2);
-		test.getTable()[0][1].setValue(2);
+		test.getTable()[0][1].setValue(0);
 		test.getTable()[0][2].setValue(0);
 		test.getTable()[0][3].setValue(2);
 		test.getTable()[1][0].setValue(4);
@@ -18,12 +18,12 @@ public class Main {
 		test.getTable()[2][2].setValue(2);
 		test.getTable()[2][3].setValue(2);
 		test.consoleRender();
+		System.out.println(test.getScore());
 		test.moveLeft();
-		System.out.println("\n");
 		test.consoleRender();
+		System.out.println(test.getScore());
 		test.moveDown();
-		System.out.println("\n");
 		test.consoleRender();
-
+		System.out.println(test.getScore());
 	}
 }
