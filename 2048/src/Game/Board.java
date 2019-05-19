@@ -7,7 +7,28 @@ public class Board {
 								{new Field(0),new Field(0),new Field(0),new Field(0)},
 								{new Field(0),new Field(0),new Field(0),new Field(0)}
 							};
+	private int score;
+	
+	
+	public Board() {
+		setScore(0);
+
+	}
+	
 		
+	public int getScore() {
+		return score;
+	}
+
+	public void sumScore(int value) {
+		setScore(getScore()+value);
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+
 	public Field[][] getTable() {
 		return table;
 	}
@@ -29,6 +50,7 @@ public class Board {
 					if (table[fila][siguiente].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[fila][siguiente]);
 						table[fila][siguiente].setValue(0);
+						sumScore(getFieldValue(fila,columna));
 						break;
 					}
 					}
@@ -61,6 +83,7 @@ public class Board {
 					if (getFieldValue(fila,siguiente) == getFieldValue(fila,columna)) {
 						table[fila][columna].sum(table[fila][siguiente]);
 						table[fila][siguiente].setValue(0);
+						sumScore(getFieldValue(fila,columna));
 						break;
 						}
 					}
@@ -93,6 +116,7 @@ public class Board {
 					if (getFieldValue(siguiente,columna) == getFieldValue(fila,columna)) {
 						table[fila][columna].sum(table[siguiente][columna]);
 						table[siguiente][columna].setValue(0);
+						sumScore(getFieldValue(fila,columna));
 						break;
 						}
 					}
@@ -125,6 +149,7 @@ public class Board {
 					if (getFieldValue(siguiente,columna) == getFieldValue(fila,columna)) {
 						table[fila][columna].sum(table[siguiente][columna]);
 						table[siguiente][columna].setValue(0);
+						sumScore(getFieldValue(fila,columna));
 						break;
 						}
 					}
@@ -150,10 +175,7 @@ public class Board {
 	
 	
 	private void fieldSpawner() {
-		
 		boolean done = false;
-		
-		
 		while (done == false) {
 			int a = (int) ((Math.random()*Math.random() * 4));
 			int b = (int) ((Math.random()*Math.random() * 4));
