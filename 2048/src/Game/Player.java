@@ -46,7 +46,6 @@ public class Player {
 		
 		while (!moves.gameLost()) {
 	    
-
 				Scanner scanner = new Scanner(System.in);
 				String movement = scanner.nextLine();
 				
