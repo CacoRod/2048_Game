@@ -25,5 +25,9 @@ public class Main {
 		test.moveDown();
 		test.consoleRender();
 		System.out.println(test.getScore());
+		Board test2 = new Board();
+		test2.consoleRender();
+		System.out.println(test2.getScore());
+		test.consoleRender();
 	}
 }
