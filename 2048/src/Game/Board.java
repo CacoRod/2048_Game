@@ -12,7 +12,8 @@ public class Board {
 	
 	public Board() {
 		setScore(0);
-
+		fieldSpawner();
+		fieldSpawner();
 	}
 	
 		
@@ -42,7 +43,7 @@ public class Board {
 	
 	
 
-	public void checkSumLeft() {
+	public void SumLeft() {
 		for (int fila=0; fila<=table.length - 1; fila++) {
 			for (int columna=0; columna<=table[fila].length - 2;columna++) {
 				for (int siguiente=columna+1;siguiente<=table.length-1;siguiente++) {
@@ -60,7 +61,7 @@ public class Board {
 	
 
 	public void moveLeft() {
-		checkSumLeft();
+		SumLeft();
 		for (int fila=0; fila<=table.length - 1; fila++) {
 			for (int contador=1; contador<=4; contador ++ ) {
 				for (int columna=table[fila].length-1; columna>0;columna--) {
@@ -75,12 +76,12 @@ public class Board {
 	}
 	
 	
-	public void checkSumRight() {
+	public void SumRight() {
 		for (int fila=0; fila<=table.length-1; fila++) {
 			for (int columna=3; columna>table.length-table.length;columna--) {
 				for (int siguiente=columna-1;siguiente>=table.length-table.length;siguiente--) {
-					if (getFieldValue(fila,siguiente) != getFieldValue(fila,columna) && getFieldValue(fila,siguiente) != 0) break;
-					if (getFieldValue(fila,siguiente) == getFieldValue(fila,columna)) {
+					if (!table[fila][siguiente].checkSum(table[fila][columna]) && getFieldValue(fila,siguiente) != 0) break;
+					if (table[fila][siguiente].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[fila][siguiente]);
 						table[fila][siguiente].setValue(0);
 						sumScore(getFieldValue(fila,columna));
@@ -93,7 +94,7 @@ public class Board {
 
 
 	public void moveRight() {
-		checkSumRight();
+		SumRight();
 		for (int fila=0; fila<=table.length-1; fila++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
 				for (int columna=0; columna<table.length-1;columna++) {
@@ -108,12 +109,12 @@ public class Board {
 	}
 	
 	
-	public void checkSumDown() {
+	public void SumDown() {
 		for (int columna=0; columna<=table.length -1; columna++) {
 			for (int fila=3; fila>table.length - table.length;fila--) {
 				for (int siguiente=fila-1;siguiente>=table.length-table.length;siguiente--) {
-					if (getFieldValue(siguiente,columna) != getFieldValue(fila,columna) && getFieldValue(siguiente,columna) != 0) break;
-					if (getFieldValue(siguiente,columna) == getFieldValue(fila,columna)) {
+					if (!table[siguiente][columna].checkSum(table[fila][columna]) && getFieldValue(siguiente,columna) != 0) break;
+					if (table[siguiente][columna].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[siguiente][columna]);
 						table[siguiente][columna].setValue(0);
 						sumScore(getFieldValue(fila,columna));
@@ -126,7 +127,7 @@ public class Board {
 	
 	
 	public void moveDown() {
-		checkSumDown();
+		SumDown();
 		for (int columna=0; columna<=table.length -1; columna++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
 				for (int fila=0; fila<table.length - 1;fila++) {
@@ -141,12 +142,12 @@ public class Board {
 	}
 	
 	
-	public void checkSumUp() {
+	public void SumUp() {
 		for (int columna=0; columna<=table.length-1; columna++) {
 			for (int fila=0; fila<=table.length-2;fila++) {
 				for (int siguiente=fila+1;siguiente<=table.length-1;siguiente++) {
-					if (getFieldValue(siguiente,columna) != getFieldValue(fila,columna) && getFieldValue(siguiente,columna) != 0) break;
-					if (getFieldValue(siguiente,columna) == getFieldValue(fila,columna)) {
+					if (!table[siguiente][columna].checkSum(table[fila][columna]) && getFieldValue(siguiente,columna) != 0) break;
+					if (table[siguiente][columna].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[siguiente][columna]);
 						table[siguiente][columna].setValue(0);
 						sumScore(getFieldValue(fila,columna));
@@ -159,7 +160,7 @@ public class Board {
 	
 	
 	public void moveUp() {
-		checkSumUp();
+		SumUp();
 		for (int columna=0; columna<=table.length-1; columna++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
 				for (int fila=3; fila>table.length-table.length;fila--) {
@@ -185,13 +186,44 @@ public class Board {
 			}
 		}
 	}
-			
-
+	public boolean isFull() {
+		for (int fila = 0; fila<=table.length-1; fila++) {
+			for (int columna = 0; columna<=table.length-1; columna++) {
+				if (getFieldValue(fila,columna) == 0) return false;
+			}
+		}
+		return true;
+	}
+	
+	public boolean checkSumHorizontal() {
+		for (int fila=0; fila<=table.length - 1; fila++) {
+			for (int columna=0; columna<=table[fila].length - 2;columna++) {
+					if (table[fila][columna+1].checkSum(table[fila][columna])) return true; 
+				}
+			}
+		return false;
+		
+	}
+	
+	public boolean checkSumVertical() {
+		for (int columna=0; columna<=table.length - 1; columna++) {
+			for (int fila=0; fila<=table[fila].length - 2;fila++) {
+					if (table[fila+1][columna].checkSum(table[fila][columna])) return true; 
+				}
+			}
+		return false;
+		
+	}
+	public boolean gameLost() {
+		if (isFull() && !checkSumHorizontal() && !checkSumVertical()) return true;
+		return false;
+	}
+	
 	public void consoleRender() {
 		for (int fila = 0; fila<=table.length-1; fila++) {
 			String rend = "";
 			for (int columna = 0; columna<=table.length-1; columna++) {
-				rend += (getFieldValue(fila, columna) + ",");
+				rend += (getFieldValue(fila, columna) + "\t");
 			}
 			System.out.println(rend);
 			}
