@@ -39,6 +39,7 @@ public class Field {
 	
 	public void sum(Field other) {
 		setValue(value += other.value);
+		other.setValue(0);
 	}
 	public boolean checkSum(Field other) {
 		return ((this.value == other.value) && (this.value != 0)); 
