@@ -226,6 +226,8 @@ public class Board {
 				rend += (getFieldValue(fila, columna) + "\t");
 			}
 			System.out.println(rend);
+			
 			}
+		System.out.println("\n" + getScore());
 		}
 	}
