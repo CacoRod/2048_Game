@@ -42,7 +42,7 @@ public class Field {
 		other.setValue(0);
 	}
 	public boolean checkSum(Field other) {
-		return ((this.value == other.value) && (this.value != 0)); 
+		return (value == other.value); 
 	}
 	
 }

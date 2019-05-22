@@ -2,9 +2,9 @@ package Game;
 
 public class Board {
 	
-	private Field[][] table = { {new Field(0),new Field(0),new Field(0),new Field(0)},
-								{new Field(0),new Field(0),new Field(0),new Field(0)},
-								{new Field(0),new Field(0),new Field(0),new Field(0)},
+	private Field[][] table = { {new Field(0),new Field(2),new Field(0),new Field(0)},
+								{new Field(0),new Field(2),new Field(0),new Field(0)},
+								{new Field(0),new Field(4),new Field(0),new Field(0)},
 								{new Field(0),new Field(0),new Field(0),new Field(0)}
 							};
 	private int score;
@@ -47,9 +47,12 @@ public class Board {
 		for (int fila=0; fila<=table.length - 1; fila++) {
 			for (int columna=0; columna<=table[fila].length - 2;columna++) {
 				for (int siguiente=columna+1;siguiente<=table.length-1;siguiente++) {
-					if (!table[fila][siguiente].checkSum(table[fila][columna])) break;
+					if (!table[fila][siguiente].checkSum(table[fila][columna]) && getFieldValue(fila,siguiente) != 0) break;
+					if (table[fila][siguiente].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[fila][siguiente]);
 						sumScore(getFieldValue(fila,columna));
+						break;
+					}
 					}
 				}
 			}
@@ -75,9 +78,12 @@ public class Board {
 		for (int fila=0; fila<=table.length-1; fila++) {
 			for (int columna=3; columna>table.length-table.length;columna--) {
 				for (int siguiente=columna-1;siguiente>=table.length-table.length;siguiente--) {
-					if (!table[fila][siguiente].checkSum(table[fila][columna])) break;
+					if (!table[fila][siguiente].checkSum(table[fila][columna]) && getFieldValue(fila,siguiente) != 0) break;
+					if (table[fila][siguiente].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[fila][siguiente]);
 						sumScore(getFieldValue(fila,columna));
+						break;
+						}
 					}
 				}
 			}
@@ -103,9 +109,12 @@ public class Board {
 		for (int columna=0; columna<=table.length -1; columna++) {
 			for (int fila=3; fila>table.length - table.length;fila--) {
 				for (int siguiente=fila-1;siguiente>=table.length-table.length;siguiente--) {
-					if (!table[siguiente][columna].checkSum(table[fila][columna])) break;
+					if (!table[siguiente][columna].checkSum(table[fila][columna]) && getFieldValue(siguiente,columna) != 0) break;
+					if (table[siguiente][columna].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[siguiente][columna]);
 						sumScore(getFieldValue(fila,columna));
+						break;
+						}
 					}
 				}
 			}
@@ -131,9 +140,12 @@ public class Board {
 		for (int columna=0; columna<=table.length-1; columna++) {
 			for (int fila=0; fila<=table.length-2;fila++) {
 				for (int siguiente=fila+1;siguiente<=table.length-1;siguiente++) {
-					if (!table[siguiente][columna].checkSum(table[fila][columna])) break;
+					if (!table[siguiente][columna].checkSum(table[fila][columna]) && getFieldValue(siguiente,columna) != 0) break;
+					if (table[siguiente][columna].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[siguiente][columna]);
 						sumScore(getFieldValue(fila,columna));
+						break;
+						}
 					}
 				}
 			}
@@ -147,6 +159,7 @@ public class Board {
 				for (int fila=3; fila>table.length-table.length;fila--) {
 					if (getFieldValue(fila-1,columna) == 0) {
 						table[fila-1][columna].sum(table[fila][columna]);
+						table[fila][columna].setValue(0);	
 					}
 				}
 			}
@@ -166,8 +179,6 @@ public class Board {
 			}
 		}
 	}
-	
-	
 	public boolean isFull() {
 		for (int fila = 0; fila<=table.length-1; fila++) {
 			for (int columna = 0; columna<=table.length-1; columna++) {
@@ -176,7 +187,6 @@ public class Board {
 		}
 		return true;
 	}
-	
 	
 	public boolean checkSumHorizontal() {
 		for (int fila=0; fila<=table.length - 1; fila++) {
@@ -188,7 +198,6 @@ public class Board {
 		
 	}
 	
-	
 	public boolean checkSumVertical() {
 		for (int columna=0; columna<=table.length - 1; columna++) {
 			for (int fila=0; fila<=table[fila].length - 2;fila++) {
@@ -198,12 +207,9 @@ public class Board {
 		return false;
 		
 	}
-	
-	
 	public boolean gameLost() {
 		return (isFull() && !checkSumHorizontal() && !checkSumVertical());
 	}
-	
 	
 	public void consoleRender() {
 		for (int fila = 0; fila<=table.length-1; fila++) {
@@ -213,7 +219,7 @@ public class Board {
 			}
 			System.out.println(rend);
 			
-		}
+			}
 		System.out.println("\n" + getScore());
 		}
 	}
