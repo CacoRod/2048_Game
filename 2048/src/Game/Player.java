@@ -67,7 +67,7 @@ public class Player {
 					System.out.println("\n");
 					moves.consoleRender();	
 				}
-				
+		
 				if (movement.equals("s")) {
 					moves.moveDown();
 					System.out.println("\n");
