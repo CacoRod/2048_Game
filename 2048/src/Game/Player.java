@@ -44,32 +44,32 @@ public class Player {
 					if (!moves.checkSumVerticalMoves()) {
 					moves.moveUp();
 					System.out.println("\n");
-					moves.consoleRender();
 					}
+					moves.consoleRender();
 					break;
 
 				case "a":
 					if (!moves.checkSumHorizontalMoves()) {
 					moves.moveLeft();
 					System.out.println("\n");
-					moves.consoleRender();
 					}
+					moves.consoleRender();
 					break;
 					
 				case "d":
 					if (!moves.checkSumAntiHorizontalMoves()) {
 					moves.moveRight();
 					System.out.println("\n");
-					moves.consoleRender();
 					}
+					moves.consoleRender();
 					break;
 
 				case "s":
 					if (!moves.checkSumAntiVerticalMoves()) {
 					moves.moveDown();
 					System.out.println("\n");
-					moves.consoleRender();
 					}
+					moves.consoleRender();
 					break;
 					
 				default:
