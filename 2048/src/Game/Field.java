@@ -1,9 +1,9 @@
 package Game;
 
-public class Field {
+public class Field{
 	// casillero. Contiene un valor y posiblemente un powerup
 	private int value;
-	private PowerUp buff;
+	private IPowerUp buff;
 	
 	
 	
@@ -12,7 +12,7 @@ public class Field {
 	
 	
 	
-	public void setBuff(PowerUp buff) {
+	public void setBuff(IPowerUp buff) {
 		this.buff = buff;
 	}
 	public int getValue() {
@@ -21,12 +21,12 @@ public class Field {
 	public void setValue(int value) {
 		this.value = value;
 	}
-	public PowerUp getBuff() {
+	public IPowerUp getBuff() {
 		return buff;
 	}
 	
 	
-	public Field(int value, PowerUp buff) {
+	public Field(int value, IPowerUp buff) {
 		setValue(value);
 		setBuff(buff);
 		
