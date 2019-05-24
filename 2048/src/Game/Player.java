@@ -60,12 +60,19 @@ public class Player {
 					if (!moves.checkSumAntiHorizontalMoves()) {
 					moves.moveRight();
 					System.out.println("\n");
+<<<<<<< HEAD
 					}
 					moves.consoleRender();
 					break;
 
 				case "s":
 					if (!moves.checkSumAntiVerticalMoves()) {
+=======
+					moves.consoleRender();	
+				}
+		
+				if (movement.equals("s")) {
+>>>>>>> origin
 					moves.moveDown();
 					System.out.println("\n");
 					}
