@@ -1,6 +1,5 @@
 package Game;
 
-import java.awt.event.KeyEvent;
 import java.util.Scanner;
 
 public class Player {
@@ -17,19 +16,31 @@ public class Player {
 		
 		setMoves(new Board());
 		moves.consoleRender();
+		
+//		int key = 1;
+//		//int key = e.getKeyCode();
+//
+//		    if (key == KeyEvent.VK_L) {
+//		        moves.moveLeft();
+//				moves.consoleRender();
+//		    }
+//
+//		    if (key == KeyEvent.VK_D) {
+//		    	moves.moveRight();
+//				moves.consoleRender();
+//		    }
+//
+//		    if (key == KeyEvent.VK_W) {
+//		    	moves.moveUp();
+//				moves.consoleRender();
+//		    }
+//
+//		    if (key == KeyEvent.VK_S) {
+//		    	moves.moveDown();
+//				moves.consoleRender();
+//		    }
 			
 	}
-//	public void movementt(KeyEvent e) {
-//		
-//		int keyCode = e.getKeyCode();
-//		
-//		if (keyCode == KeyEvent.VK_W) {
-//			moves.moveUp();
-//			System.out.println("\n");
-//			moves.consoleRender();	
-//		}
-//	}
-	
 	public void movement() {
 		
 		
@@ -38,75 +49,30 @@ public class Player {
 				Scanner scanner = new Scanner(System.in);
 				String movement = scanner.nextLine();
 				
-				switch (movement) {
 				
-				case "w":
-					if (!moves.checkSumVerticalMoves()) {
+				if (movement.equals("w")) {
 					moves.moveUp();
 					System.out.println("\n");
-					}
-					moves.consoleRender();
-					break;
-
-				case "a":
-					if (!moves.checkSumHorizontalMoves()) {
+					moves.consoleRender();	
+				}
+				
+				if (movement.equals("a")) {
 					moves.moveLeft();
 					System.out.println("\n");
-					}
-					moves.consoleRender();
-					break;
-					
-				case "d":
-					if (!moves.checkSumAntiHorizontalMoves()) {
+					moves.consoleRender();	
+				}
+				
+				if (movement.equals("d")) {
 					moves.moveRight();
 					System.out.println("\n");
-<<<<<<< HEAD
-					}
-					moves.consoleRender();
-					break;
-
-				case "s":
-					if (!moves.checkSumAntiVerticalMoves()) {
-=======
 					moves.consoleRender();	
 				}
 		
 				if (movement.equals("s")) {
->>>>>>> origin
 					moves.moveDown();
 					System.out.println("\n");
+					moves.consoleRender();	
 					}
-					moves.consoleRender();
-					break;
-					
-				default:
-					break;
-				}
-				
-//				
-//				if (movement.equals("w")) {
-//					moves.moveUp();
-//					System.out.println("\n");
-//					moves.consoleRender();	
-//				}
-//				
-//				if (movement.equals("a")) {
-//					moves.moveLeft();
-//					System.out.println("\n");
-//					moves.consoleRender();	
-//				}
-//				
-//				if (movement.equals("d")) {
-//					moves.moveRight();
-//					System.out.println("\n");
-//					moves.consoleRender();	
-//				}
-//				
-//				if (movement.equals("s")) {
-//					moves.moveDown();
-//					System.out.println("\n");
-//					moves.consoleRender();	
-//					}
 			}
 		System.out.println("Perdiste");
 		}

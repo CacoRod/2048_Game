@@ -44,8 +44,5 @@ public class Field {
 	public boolean checkSum(Field other) {
 		return (value == other.value); 
 	}
-
-	public boolean checkSumMoves(Field other) {
-		return ((this.value == other.value) && (this.value != 0)); 
-	}
+	
 }

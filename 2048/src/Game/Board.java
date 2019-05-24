@@ -195,6 +195,7 @@ public class Board {
 				}
 			}
 		return false;
+		
 	}
 	
 	public boolean checkSumVertical() {
@@ -204,44 +205,8 @@ public class Board {
 				}
 			}
 		return false;
+		
 	}
-	
-	public boolean checkSumHorizontalMoves() {
-		for (int fila=0; fila<=table.length - 1; fila++) {
-			for (int columna=0; columna<=table[fila].length - 2;columna++) {
-					if (table[fila][columna+1].checkSumMoves(table[fila][columna])) return true; 
-				}
-			}
-		return false;
-	}
-	
-	public boolean checkSumVerticalMoves() {
-		for (int columna=0; columna<=table.length - 1; columna++) {
-			for (int fila=0; fila<=table[fila].length - 2;fila++) {
-					if (table[fila+1][columna].checkSumMoves(table[fila][columna])) return true; 
-				}
-			}
-		return false;
-	}
-	
-	public boolean checkSumAntiHorizontalMoves() {
-		for (int fila=0; fila<=table.length - 1; fila++) {
-			for (int columna=table[fila].length - 2; columna > 0; columna--) {
-					if (table[fila][columna-1].checkSumMoves(table[fila][columna])) return true; 
-				}
-			}
-		return false;
-	}
-	
-	public boolean checkSumAntiVerticalMoves() {
-		for (int columna=0; columna<=table.length - 1; columna++) {
-			for (int fila=table[columna].length - 2; fila > 0; fila--) {
-					if (table[fila-1][columna].checkSumMoves(table[fila][columna])) return true; 
-				}
-			}
-		return false;
-	}
-	
 	public boolean gameLost() {
 		return (isFull() && !checkSumHorizontal() && !checkSumVertical());
 	}
