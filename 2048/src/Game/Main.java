@@ -5,9 +5,8 @@ public class Main {
 	public static void main(String[] args) {
 
 		
-		
-		Player one = new Player();
-		one.movement();
+		Game test = new Game();
+		test.movement();
 //		Board test = new Board();
 //		test.getTable()[0][0].setValue(1);
 //		test.getTable()[0][1].setValue(2);
