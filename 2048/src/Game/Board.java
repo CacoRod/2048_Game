@@ -43,7 +43,7 @@ public class Board {
 	
 	
 
-	public void SumLeft() {
+	public void sumLeft() {
 		for (int fila=0; fila<=table.length - 1; fila++) {
 			for (int columna=0; columna<=table[fila].length - 2;columna++) {
 				for (int siguiente=columna+1;siguiente<=table.length-1;siguiente++) {
@@ -60,7 +60,7 @@ public class Board {
 	
 
 	public void moveLeft() {
-		SumLeft();
+		sumLeft();
 		for (int fila=0; fila<=table.length - 1; fila++) {
 			for (int contador=1; contador<=4; contador ++ ) {
 				for (int columna=table[fila].length-1; columna>0;columna--) {
@@ -74,7 +74,7 @@ public class Board {
 	}
 	
 	
-	public void SumRight() {
+	public void sumRight() {
 		for (int fila=0; fila<=table.length-1; fila++) {
 			for (int columna=3; columna>table.length-table.length;columna--) {
 				for (int siguiente=columna-1;siguiente>=table.length-table.length;siguiente--) {
@@ -91,7 +91,7 @@ public class Board {
 
 
 	public void moveRight() {
-		SumRight();
+		sumRight();
 		for (int fila=0; fila<=table.length-1; fila++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
 				for (int columna=0; columna<table.length-1;columna++) {
@@ -105,7 +105,7 @@ public class Board {
 	}
 	
 	
-	public void SumDown() {
+	public void sumDown() {
 		for (int columna=0; columna<=table.length -1; columna++) {
 			for (int fila=3; fila>table.length - table.length;fila--) {
 				for (int siguiente=fila-1;siguiente>=table.length-table.length;siguiente--) {
@@ -122,7 +122,7 @@ public class Board {
 	
 	
 	public void moveDown() {
-		SumDown();
+		sumDown();
 		for (int columna=0; columna<=table.length -1; columna++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
 				for (int fila=0; fila<table.length - 1;fila++) {
@@ -136,7 +136,7 @@ public class Board {
 	}
 	
 	
-	public void SumUp() {
+	public void sumUp() {
 		for (int columna=0; columna<=table.length-1; columna++) {
 			for (int fila=0; fila<=table.length-2;fila++) {
 				for (int siguiente=fila+1;siguiente<=table.length-1;siguiente++) {
@@ -153,7 +153,7 @@ public class Board {
 	
 	
 	public void moveUp() {
-		SumUp();
+		sumUp();
 		for (int columna=0; columna<=table.length-1; columna++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
 				for (int fila=3; fila>table.length-table.length;fila--) {
@@ -170,7 +170,7 @@ public class Board {
 	
 	private void fieldSpawner() {
 		boolean done = false;
-		while (done == false) {
+		while (!done) {
 			int a = (int) ((Math.random()*Math.random() * 4));
 			int b = (int) ((Math.random()*Math.random() * 4));
 			if (getFieldValue(a, b) == 0) {
