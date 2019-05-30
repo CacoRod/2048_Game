@@ -1,12 +1,14 @@
 package Game;
 
-public class Board {
+public class Board{
 	
 	private Field[][] table = { {new Field(0),new Field(2),new Field(0),new Field(0)},
 								{new Field(0),new Field(2),new Field(0),new Field(0)},
 								{new Field(0),new Field(4),new Field(0),new Field(0)},
 								{new Field(0),new Field(0),new Field(0),new Field(0)}
 							};
+	
+	PBlockedField test = new PBlockedField(2);
 	private int score;
 	
 	
@@ -174,7 +176,7 @@ public class Board {
 			int a = (int) ((Math.random()*Math.random() * 4));
 			int b = (int) ((Math.random()*Math.random() * 4));
 			if (getFieldValue(a, b) == 0) {
-				table[a][b].setValue(2);
+				table[a][b] = new Field(2);
 				done = true;
 			}
 		}
@@ -211,15 +213,4 @@ public class Board {
 		return (isFull() && !checkSumHorizontal() && !checkSumVertical());
 	}
 	
-	public void consoleRender() {
-		for (int fila = 0; fila<=table.length-1; fila++) {
-			String rend = "";
-			for (int columna = 0; columna<=table.length-1; columna++) {
-				rend += (getFieldValue(fila, columna) + "\t");
-			}
-			System.out.println(rend);
-			
-			}
-		System.out.println("\n" + getScore());
-		}
 	}
