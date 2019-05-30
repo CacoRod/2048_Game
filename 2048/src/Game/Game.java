@@ -3,13 +3,15 @@ package Game;
 import java.util.Scanner;
 
 //tiene dos jugador. Tiene que poder iniciar una nueva partida, restartearla, cargar y guardar
-public class Game {
+public class Game
+{
 	
 	private Player player1;
 	private Player player2;
 	
 	
-	public Game() {
+	public Game() 
+	{
 		player1 = new Player("player 1");
 		player1.setGame(this);
 		player2 = new Player("player 2");
@@ -94,6 +96,8 @@ public class Game {
 	{
 		if (debuff instanceof PowerUpBlock) blockField(player.getMoves(), player);
 		if (debuff instanceof PowerUpDivide) divideField(player.getMoves(), player);
+		if (debuff instanceof PowerUpRemove) removeField(player.getMoves(), player);
 	}
+
 
 }

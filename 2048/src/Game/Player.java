@@ -2,7 +2,8 @@ package Game;
 
 import java.util.Scanner;
 
-public class Player {
+public class Player
+{
 	
 	private Board moves;
 	private String name;

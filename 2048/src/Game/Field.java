@@ -1,6 +1,7 @@
 package Game;
 
-public class Field{
+public class Field
+{
 	// casillero. Contiene un valor y posiblemente un powerup
 	private int value;
 	private PowerUp buff;
@@ -62,11 +63,11 @@ public class Field{
 			setValue(value += other.value);
 			other.setValue(0);
 			if (hasPowerUp()) {
-				board.powerUpfound(getBuff());
+				board.powerUpFound(getBuff());
 				setBuff(null);
 			}
 			if (other.hasPowerUp()) { 
-				board.powerUpfound(other.getBuff());
+				board.powerUpFound(other.getBuff());
 				other.setBuff(null);
 			}
 		}
@@ -81,4 +82,5 @@ public class Field{
 	{
 		return (this.getBuff() != null);
 	}
+
 }

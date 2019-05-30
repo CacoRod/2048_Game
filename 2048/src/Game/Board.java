@@ -1,6 +1,7 @@
 package Game;
 
-public class Board {
+public class Board 
+{
 	
 	private Field[][] table = { {new Field(4,this),new Field(2,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(2,this),new Field(0,this),new Field(0,this)},
@@ -8,33 +9,14 @@ public class Board {
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)}
 							};
 	
-	private int score;
 	private Player player;
 	
 	
 	public Board() 
 	{
-		setScore(0);
 		fieldSpawner();
 		fieldSpawner();
 	}
-	
-		
-	public int getScore()
-	{
-		return score;
-	}
-
-	public void sumScore(int value) 
-	{
-		setScore(getScore()+value);
-	}
-
-	public void setScore(int score) 
-	{
-		this.score = score;
-	}
-
 
 	public Field[][] getTable() 
 	{
@@ -69,7 +51,6 @@ public class Board {
 					if (!table[fila][siguiente].checkSum(table[fila][columna]) && getFieldValue(fila,siguiente) != 0) break;
 					if (table[fila][siguiente].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[fila][siguiente]);
-						sumScore(getFieldValue(fila,columna));
 						break;
 					}
 				}
@@ -102,7 +83,6 @@ public class Board {
 					if (!table[fila][siguiente].checkSum(table[fila][columna]) && getFieldValue(fila,siguiente) != 0) break;
 					if (table[fila][siguiente].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[fila][siguiente]);
-						sumScore(getFieldValue(fila,columna));
 						break;
 					}
 				}
@@ -135,7 +115,6 @@ public class Board {
 					if (!table[siguiente][columna].checkSum(table[fila][columna]) && getFieldValue(siguiente,columna) != 0) break;
 					if (table[siguiente][columna].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[siguiente][columna]);
-						sumScore(getFieldValue(fila,columna));
 						break;
 					}
 				}
@@ -168,7 +147,6 @@ public class Board {
 					if (!table[siguiente][columna].checkSum(table[fila][columna]) && getFieldValue(siguiente,columna) != 0) break;
 					if (table[siguiente][columna].checkSum(table[fila][columna])) {
 						table[fila][columna].sum(table[siguiente][columna]);
-						sumScore(getFieldValue(fila,columna));
 						break;
 					}
 				}
@@ -206,7 +184,6 @@ public class Board {
 			System.out.println(rend);
 			
 			}
-		System.out.println("\n" + getScore());
 	}
 	
 	
@@ -216,8 +193,10 @@ public class Board {
 		while (!done) {
 			int a = (int) ((Math.random()*Math.random() * 4));
 			int b = (int) ((Math.random()*Math.random() * 4));
+			int c = (int) ((Math.random()*Math.random() * 5));
 			if (getFieldValue(a, b) == 0 && !(table[a][b] instanceof PBlockedField)) {
-				table[a][b] = new Field(2,this);
+				if (c == 0)	table[a][b] = new Field(2,this, randomPowerUp());
+				else table[a][b] = new Field(2,this);
 				done = true;
 			}
 		}
@@ -258,8 +237,18 @@ public class Board {
 		return (isFull() && !checkSumHorizontal() && !checkSumVertical());
 	}
 	
-	public void powerUpfound(PowerUp buff)
+	public void powerUpFound(PowerUp buff)
 	{
 		player.applyPowerUp(buff);
 	}
+	
+	public PowerUp randomPowerUp() 
+	{
+		int a = (int) ((Math.random()*Math.random() * 4));
+		if (a == 0) return new PowerUpBlock();
+		if (a == 1) return new PowerUpRemove();
+		if (a == 2) return new PowerUpMove();
+		if (a == 3) return new PowerUpDivide();
+		return null;
 	}
+}
