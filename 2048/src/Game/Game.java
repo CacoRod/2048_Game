@@ -56,7 +56,21 @@ public class Game {
 			}
 		}
 	}
-
+	
+	public void divideField(Board board, Player player) 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * board.getTable().length));
+			int b = (int) ((Math.random()*Math.random() * board.getTable().length));
+			if (board.getFieldValue(a,b) != 0 && board.getFieldValue(a,b) != 2 ) {
+				board.getTable()[a][b].setValue(board.getFieldValue(a,b)/2);;
+				System.out.println("Field [" + a + "][" + b +"] from " + player.getName() + " has been divided");
+				done = true;
+			}
+		}
+	}
+	
 	public void powerUpTrigger(PowerUp buff, Player player) 
 	{
 		if (player != player1) applyDebuff(player1,buff);
@@ -66,6 +80,7 @@ public class Game {
 	public void applyDebuff(Player player, PowerUp debuff) 
 	{
 		if (debuff instanceof PowerUpBlock) blockField(player.getMoves(), player);
+		if (debuff instanceof PowerUpDivide) divideField(player.getMoves(), player);
 	}
 
 }

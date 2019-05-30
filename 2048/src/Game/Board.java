@@ -2,8 +2,8 @@ package Game;
 
 public class Board {
 	
-	private Field[][] table = { {new Field(0,this),new Field(2,this),new Field(0,this),new Field(0,this)},
-								{new Field(0,this),new Field(2,this, new PowerUpBlock()),new Field(0,this),new Field(0,this)},
+	private Field[][] table = { {new Field(4,this),new Field(2,this),new Field(0,this),new Field(0,this)},
+								{new Field(0,this),new Field(2,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(2,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)}
 							};
