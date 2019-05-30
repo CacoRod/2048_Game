@@ -60,18 +60,21 @@ public class Field
 	public void sum(Field other)
 	{
 		if (!(this instanceof PBlockedField) && !(other instanceof PBlockedField)) {
-			setValue(value += other.value);
-			other.setValue(0);
-			if (hasPowerUp()) {
+			if (hasPowerUp() && other.value != 0) {
 				board.powerUpFound(getBuff());
 				setBuff(null);
 			}
-			if (other.hasPowerUp()) { 
+			if (other.hasPowerUp() && value != 0) { 
 				board.powerUpFound(other.getBuff());
 				other.setBuff(null);
 			}
+			setValue(value += other.value);
+			setBuff(other.getBuff());
+			other.setValue(0);
+			other.setBuff(null);
 		}
 	}
+	
 	
 	public boolean checkSum(Field other) 
 	{

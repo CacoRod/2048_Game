@@ -79,7 +79,7 @@ public class Game
 		while (done == false) {
 			int a = (int) ((Math.random()*Math.random() * board.getTable().length));
 			int b = (int) ((Math.random()*Math.random() * board.getTable().length));
-			if (board.getFieldValue(a,b) != 0) {
+			if (board.getFieldValue(a,b) != 0 && !(board.getTable()[a][b].hasPowerUp())) {
 				board.getTable()[a][b].setValue(0);;
 				System.out.println("Field [" + a + "][" + b +"] from " + player.getName() + " has been removed");
 				done = true;
@@ -99,5 +99,45 @@ public class Game
 		if (debuff instanceof PowerUpRemove) removeField(player.getMoves(), player);
 	}
 
-
+	public void help() 
+	{
+		String help = "INSTRUCTIONS: \n"
+				+ "\nHow to Play:\n"
+				+ "\nTwo players, each with his board(4x4) must move the fields inside it. Each time a Player moves,\n"
+				+ "a new field spawns in his board.Should two fields of the same value clash, they'll add up into\n"
+				+ "a single field of greater value. Only fields of same value can add up. The game is done once a player\n"
+				+ "can't make any more moves, signaling the other player's victory\n"
+				+ "8 - a field is represented by it's current value\n"
+				+ "B(4) - this is a blocked field: It can't be moved or summed no matter it's value:\n"
+				+ "\nPowerups:\n"
+				+ "\nIf a field has a powerup it will show up as a letter next to the number. "
+				+ "If a player sums a field containing one, it will apply a debuff on the enemy player\n"
+				+ "R - remove a random field from the enemy player\n"
+				+ "B - block a random field from the enemy player, preventing it from being summed or moved\n"
+				+ "D - divide a random field from the enemy player, cutting it's value in half\n"
+				+ "M - should the enemy player move, a random file/row will move in the oposite direction\n"
+				+ "\nControls:\n"
+				+ "\nw - move up\n"
+				+ "s - move down\n"
+				+ "a - move left\n"
+				+ "d - move right\n"
+				+ "h - press h at any time to bring up this menu\n"
+				+ "n - start a new game\n";
+				
+		System.out.println(help);
+	}
+	public void menu()
+	{
+		help();
+		Scanner scanner = new Scanner(System.in);
+		String scan = scanner.nextLine();
+		char movement = scan.charAt(0);
+		
+		if (movement == 'h') {
+			menu();
+		}
+		if (movement == 'n') {
+			gamePlay();	
+		}
+	}
 }

@@ -57,6 +57,11 @@ public class Player
 		String scan = scanner.nextLine();
 		char movement = scan.charAt(0);
 				
+		if (movement == 'h') {
+			game.help();
+			movement();	
+		}
+				
 				
 		if (movement == 'w') {
 			getMoves().moveUp();
@@ -79,6 +84,7 @@ public class Player
 			}
 		game.revertBlockedField(getMoves(), this);
 		moves.consoleRender();
+		System.out.println("===============================================");
 	}
 
 	public void applyPowerUp(PowerUp buff)

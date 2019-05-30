@@ -3,10 +3,10 @@ package Game;
 public class Board 
 {
 	
-	private Field[][] table = { {new Field(4,this),new Field(2,this),new Field(0,this),new Field(0,this)},
-								{new Field(0,this),new Field(2,this),new Field(0,this),new Field(0,this)},
-								{new Field(0,this),new Field(2,this),new Field(0,this),new Field(0,this)},
-								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)}
+	private Field[][] table = { {new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
+								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
+								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
+								{new Field(2,this,new PowerUpRemove()),new Field(0,this),new Field(0,this),new Field(0,this)}
 							};
 	
 	private Player player;
@@ -175,11 +175,13 @@ public class Board
 		for (int fila = 0; fila<=table.length-1; fila++) {
 			String rend = "";
 			for (int columna = 0; columna<=table.length-1; columna++) {
-				if (table[fila][columna] instanceof PBlockedField) rend += "B(" +getFieldValue(fila, columna) + ")";
+				if (table[fila][columna] instanceof PBlockedField) rend += "B(" +getFieldValue(fila, columna) + ")\t";
+				else{
 				if (getFieldValue(fila, columna) == 0) rend += "-";
 				else rend += getFieldValue(fila, columna);
 				if (table[fila][columna].hasPowerUp()) rend += table[fila][columna].getBuff().render();
 				rend += "\t";
+				}
 			}
 			System.out.println(rend);
 			
@@ -190,10 +192,10 @@ public class Board
 	private void fieldSpawner()
 	{
 		boolean done = false;
+		int c = (int) ((Math.random()*Math.random() * 20));
 		while (!done) {
 			int a = (int) ((Math.random()*Math.random() * 4));
 			int b = (int) ((Math.random()*Math.random() * 4));
-			int c = (int) ((Math.random()*Math.random() * 5));
 			if (getFieldValue(a, b) == 0 && !(table[a][b] instanceof PBlockedField)) {
 				if (c == 0)	table[a][b] = new Field(2,this, randomPowerUp());
 				else table[a][b] = new Field(2,this);
