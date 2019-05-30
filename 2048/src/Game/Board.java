@@ -198,6 +198,7 @@ public class Board {
 			String rend = "";
 			for (int columna = 0; columna<=table.length-1; columna++) {
 				if (table[fila][columna] instanceof PBlockedField) rend += "B(" +getFieldValue(fila, columna) + ")";
+				if (getFieldValue(fila, columna) == 0) rend += "-";
 				else rend += getFieldValue(fila, columna);
 				if (table[fila][columna].hasPowerUp()) rend += table[fila][columna].getBuff().render();
 				rend += "\t";

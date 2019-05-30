@@ -71,6 +71,19 @@ public class Game {
 		}
 	}
 	
+	public void removeField(Board board, Player player) 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * board.getTable().length));
+			int b = (int) ((Math.random()*Math.random() * board.getTable().length));
+			if (board.getFieldValue(a,b) != 0) {
+				board.getTable()[a][b].setValue(0);;
+				System.out.println("Field [" + a + "][" + b +"] from " + player.getName() + " has been removed");
+				done = true;
+			}
+		}
+	}
 	public void powerUpTrigger(PowerUp buff, Player player) 
 	{
 		if (player != player1) applyDebuff(player1,buff);
