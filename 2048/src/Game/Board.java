@@ -3,8 +3,8 @@ package Game;
 public class Board {
 	
 	private Field[][] table = { {new Field(0,this),new Field(2,this),new Field(0,this),new Field(0,this)},
+								{new Field(0,this),new Field(2,this, new PowerUpBlock()),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(2,this),new Field(0,this),new Field(0,this)},
-								{new Field(0,this),new Field(4,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)}
 							};
 	
@@ -193,6 +193,21 @@ public class Board {
 		fieldSpawner();
 	}
 	
+	public void consoleRender() {
+		for (int fila = 0; fila<=table.length-1; fila++) {
+			String rend = "";
+			for (int columna = 0; columna<=table.length-1; columna++) {
+				if (table[fila][columna] instanceof PBlockedField) rend += "B(" +getFieldValue(fila, columna) + ")";
+				else rend += getFieldValue(fila, columna);
+				if (table[fila][columna].hasPowerUp()) rend += table[fila][columna].getBuff().render();
+				rend += "\t";
+			}
+			System.out.println(rend);
+			
+			}
+		System.out.println("\n" + getScore());
+	}
+	
 	
 	private void fieldSpawner()
 	{
@@ -200,7 +215,7 @@ public class Board {
 		while (!done) {
 			int a = (int) ((Math.random()*Math.random() * 4));
 			int b = (int) ((Math.random()*Math.random() * 4));
-			if (getFieldValue(a, b) == 0) {
+			if (getFieldValue(a, b) == 0 && !(table[a][b] instanceof PBlockedField)) {
 				table[a][b] = new Field(2,this);
 				done = true;
 			}
@@ -241,6 +256,7 @@ public class Board {
 	{
 		return (isFull() && !checkSumHorizontal() && !checkSumVertical());
 	}
+	
 	public void powerUpfound(PowerUp buff)
 	{
 		player.applyPowerUp(buff);

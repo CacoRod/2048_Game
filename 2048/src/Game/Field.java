@@ -45,12 +45,14 @@ public class Field{
 	{
 		setValue(value);
 		setBuff(buff);
+		setBoard(board);
 		
 	}
 	
 	public Field (int value, Board board) 
 	{
 		setValue(value);
+		setBoard(board);
 		
 	}
 	
@@ -59,14 +61,20 @@ public class Field{
 		if (!(this instanceof PBlockedField) && !(other instanceof PBlockedField)) {
 			setValue(value += other.value);
 			other.setValue(0);
-			if (hasPowerUp()) board.powerUpfound(getBuff());
-			if (other.hasPowerUp()) board.powerUpfound(other.getBuff());
+			if (hasPowerUp()) {
+				board.powerUpfound(getBuff());
+				setBuff(null);
+			}
+			if (other.hasPowerUp()) { 
+				board.powerUpfound(other.getBuff());
+				other.setBuff(null);
+			}
 		}
 	}
 	
 	public boolean checkSum(Field other) 
 	{
-		return (value == other.value); 
+		return (value == other.value && !(this instanceof PBlockedField)); 
 	}
 	
 	public boolean hasPowerUp()

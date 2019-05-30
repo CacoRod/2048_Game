@@ -31,7 +31,7 @@ public class Game {
 		}
 
 	
-	public void blockedField(Board board) 
+	public void blockField(Board board, Player player) 
 	{
 		boolean done = false;
 		while (done == false) {
@@ -39,17 +39,19 @@ public class Game {
 			int b = (int) ((Math.random()*Math.random() * board.getTable().length));
 			if (board.getFieldValue(a,b) != 0) {
 				board.getTable()[a][b] = new PBlockedField(board.getFieldValue(a, b));
+				System.out.println("Field [" + a + "][" + b +"] from " + player.getName() + " has been blocked");
 				done = true;
 			}
 		}
 	}
 	
-	public void revertBlockedField(Board board)
+	public void revertBlockedField(Board board, Player player)
 	{
 		for (int fila = 0; fila<=board.getTable().length-1; fila++) {
 			for (int columna = 0; columna<=board.getTable().length-1; columna++) {
 				if (board.getTable()[fila][columna] instanceof PBlockedField) {
 					board.getTable()[fila][columna] = new Field(board.getFieldValue(fila,columna), board);
+					System.out.println("Field [" + fila + "][" + columna + "] from " + player.getName() + " has been unblocked");
 				}
 			}
 		}
@@ -57,13 +59,13 @@ public class Game {
 
 	public void powerUpTrigger(PowerUp buff, Player player) 
 	{
-		if (player != player1) applyDebuff(player2);
-		else applyDebuff(player1);
+		if (player != player1) applyDebuff(player1,buff);
+		else applyDebuff(player2,buff);
 	}
 	
-	public void applyDebuff(Player player) 
+	public void applyDebuff(Player player, PowerUp debuff) 
 	{
-		
+		if (debuff instanceof PowerUpBlock) blockField(player.getMoves(), player);
 	}
 
 }

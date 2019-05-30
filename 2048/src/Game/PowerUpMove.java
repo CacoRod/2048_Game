@@ -1,5 +1,8 @@
 package Game;
 
 public class PowerUpMove extends PowerUp {
-  // los powerups que van a aimplementarse en la partida
+	
+	public String render() {
+		return "M";
+	}
 }

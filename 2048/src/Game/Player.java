@@ -4,8 +4,6 @@ import java.util.Scanner;
 
 public class Player {
 	
-	//registro de jugador. Su puntaje, su juego y sus controles
-	
 	private Board moves;
 	private String name;
 	private Game game;
@@ -52,7 +50,8 @@ public class Player {
 	public void movement() 
 	{
 		System.out.println(getName());
-		consoleRender();
+		moves.consoleRender();
+		
 		Scanner scanner = new Scanner(System.in);
 		String scan = scanner.nextLine();
 		char movement = scan.charAt(0);
@@ -77,22 +76,10 @@ public class Player {
 			getMoves().moveDown();
 			System.out.println("\n");	
 			}
-		consoleRender();
+		game.revertBlockedField(getMoves(), this);
+		moves.consoleRender();
 	}
-	public void consoleRender() {
-		for (int fila = 0; fila<=moves.getTable().length-1; fila++) {
-			String rend = "";
-			for (int columna = 0; columna<=moves.getTable().length-1; columna++) {
-				rend += moves.getFieldValue(fila, columna);
-				if (moves.getTable()[fila][columna].hasPowerUp()) rend += "P";
-				rend += "\t";
-			}
-			System.out.println(rend);
-			
-			}
-		System.out.println("\n" + moves.getScore());
-		}
-	
+
 	public void applyPowerUp(PowerUp buff)
 	{
 		game.powerUpTrigger(buff, this);
