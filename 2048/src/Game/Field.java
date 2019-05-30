@@ -3,50 +3,74 @@ package Game;
 public class Field{
 	// casillero. Contiene un valor y posiblemente un powerup
 	private int value;
-	private IPowerUp buff;
+	private PowerUp buff;
+	private Board board;
 	
 	
 	
 	
-	
-	
-	
-	
-	public void setBuff(IPowerUp buff) {
+
+	public Board getBoard()
+	{
+		return board;
+	}
+
+	public void setBoard(Board board) 
+	{
+		this.board = board;
+	}
+
+	public void setBuff(PowerUp buff) 
+	{
 		this.buff = buff;
 	}
-	public int getValue() {
+	
+	public int getValue() 
+	{
 		return value;
 	}
-	public void setValue(int value) {
+	
+	public void setValue(int value) 
+	{
 		this.value = value;
 	}
-	public IPowerUp getBuff() {
+	
+	public PowerUp getBuff()
+	{
 		return buff;
 	}
 	
 	
-	public Field(int value, IPowerUp buff) {
+	public Field(int value,Board board, PowerUp buff) 
+	{
 		setValue(value);
 		setBuff(buff);
 		
 	}
-	public Field (int value) {
+	
+	public Field (int value, Board board) 
+	{
 		setValue(value);
 		
 	}
 	
-	
-	public void sum(Field other) {
+	public void sum(Field other)
+	{
 		if (!(this instanceof PBlockedField) && !(other instanceof PBlockedField)) {
 			setValue(value += other.value);
 			other.setValue(0);
+			if (hasPowerUp()) board.powerUpfound(getBuff());
+			if (other.hasPowerUp()) board.powerUpfound(other.getBuff());
 		}
 	}
-	public boolean checkSum(Field other) {
+	
+	public boolean checkSum(Field other) 
+	{
 		return (value == other.value); 
 	}
-	public boolean hasPowerUp() {
+	
+	public boolean hasPowerUp()
+	{
 		return (this.getBuff() != null);
 	}
 }

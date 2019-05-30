@@ -10,75 +10,29 @@ public class Game {
 	
 	
 	public Game() {
-		player1 = new Player("player 1",'w','s','a','d');
-		player2 = new Player("player 2", 'i','k','j','l');
+		player1 = new Player("player 1");
+		player1.setGame(this);
+		player2 = new Player("player 2");
+		player2.setGame(this);
+
 	}
-	public void movement() {
+	public void gamePlay() 
+	{
+		int turn = -1;
 		
-		
-		while (!player1.getMoves().gameLost() || !player2.getMoves().gameLost()) {
-	    
-				Scanner scanner = new Scanner(System.in);
-				String scan = scanner.nextLine();
-				char movement = scan.charAt(0);
+		while (!player1.getMoves().gameLost() || !player2.getMoves().gameLost()) 
+		{
+				turn = turn*-1;
+				if (turn == 1) player1.movement();
+				else player2.movement();
 				
-				
-				if (movement == player1.getUp()) {
-					player1.getMoves().moveUp();
-					System.out.println("\n");
-					player1.consoleRender();	
-				}
-				
-				if (movement == player1.getLeft()) {
-					player1.getMoves().moveLeft();
-					System.out.println("\n");
-					player1.consoleRender();	
-				}
-				
-				if (movement == player1.getRight()) {
-					player1.getMoves().moveRight();
-					System.out.println("\n");
-					player1.consoleRender();	
-				}
-		
-				if (movement == player1.getDown()) {
-					player1.getMoves().moveDown();
-					System.out.println("\n");
-					player1.consoleRender();	
-					}
-				
-				
-				
-				
-				if (movement == player2.getUp()) {
-					player2.getMoves().moveUp();
-					System.out.println("\n");
-					player2.consoleRender();	
-				}
-				
-				if (movement == player2.getLeft()) {
-					player2.getMoves().moveLeft();
-					System.out.println("\n");
-					player2.consoleRender();	
-				}
-				
-				if (movement == player2.getRight()) {
-					player2.getMoves().moveRight();
-					System.out.println("\n");
-					player2.consoleRender();	
-				}
-		
-				if (movement == player2.getDown()) {
-					player2.getMoves().moveDown();
-					System.out.println("\n");
-					player2.consoleRender();	
-					}
 			}
 		System.out.println("Perdiste");
 		}
 
 	
-	public void blockedField(Board board) {
+	public void blockedField(Board board) 
+	{
 		boolean done = false;
 		while (done == false) {
 			int a = (int) ((Math.random()*Math.random() * board.getTable().length));
@@ -90,16 +44,26 @@ public class Game {
 		}
 	}
 	
-	public void revertBlockedField(Board board) {
+	public void revertBlockedField(Board board)
+	{
 		for (int fila = 0; fila<=board.getTable().length-1; fila++) {
 			for (int columna = 0; columna<=board.getTable().length-1; columna++) {
 				if (board.getTable()[fila][columna] instanceof PBlockedField) {
-					board.getTable()[fila][columna] = new Field(board.getFieldValue(fila,columna));
+					board.getTable()[fila][columna] = new Field(board.getFieldValue(fila,columna), board);
 				}
 			}
 		}
 	}
-	
 
+	public void powerUpTrigger(PowerUp buff, Player player) 
+	{
+		if (player != player1) applyDebuff(player2);
+		else applyDebuff(player1);
+	}
+	
+	public void applyDebuff(Player player) 
+	{
+		
+	}
 
 }

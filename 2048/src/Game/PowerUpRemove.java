@@ -1,5 +1,5 @@
 package Game;
 
-public interface IPowerUpRemove extends IPowerUp {
+public class PowerUpRemove extends PowerUp {
   // los powerups que van a aimplementarse en la partida
 }
