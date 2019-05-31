@@ -7,10 +7,6 @@ public class Field
 	private PowerUp buff;
 	private Board board;
 	
-	
-	
-	
-
 	public Board getBoard()
 	{
 		return board;
@@ -56,7 +52,6 @@ public class Field
 		setBoard(board);
 		
 	}
-	
 	public void sum(Field other)
 	{
 		if (!(this instanceof PBlockedField) && !(other instanceof PBlockedField)) {

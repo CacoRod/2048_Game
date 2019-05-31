@@ -1,14 +1,13 @@
 package Game;
 
-public class Board 
-{
+public class Board{
 	
 	private Field[][] table = { {new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
-								{new Field(2,this,new PowerUpRemove()),new Field(0,this),new Field(0,this),new Field(0,this)}
+								{new Field(2,this),new Field(0,this),new Field(0,this),new Field(0,this)}
 							};
-	
+
 	private Player player;
 	
 	
@@ -196,10 +195,10 @@ public class Board
 		while (!done) {
 			int a = (int) ((Math.random()*Math.random() * 4));
 			int b = (int) ((Math.random()*Math.random() * 4));
+
 			if (getFieldValue(a, b) == 0 && !(table[a][b] instanceof PBlockedField)) {
 				if (c == 0)	table[a][b] = new Field(2,this, randomPowerUp());
 				else table[a][b] = new Field(2,this);
-				done = true;
 			}
 		}
 	}

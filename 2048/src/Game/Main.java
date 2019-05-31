@@ -6,7 +6,6 @@ public class Main {
 
 		Game test = new Game();
 		test.menu();
-
 	}
 }
 

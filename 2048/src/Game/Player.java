@@ -91,5 +91,17 @@ public class Player
 	{
 		game.powerUpTrigger(buff, this);
 	}
+	
+	public void consoleRender() {
+		System.out.println(getName());
+		for (int fila = 0; fila<=moves.getTable().length-1; fila++) {
+			String rend = "";
+			for (int columna = 0; columna<=moves.getTable().length-1; columna++) {
+				rend += (moves.getFieldValue(fila, columna) + "\t");
+			}
+			System.out.println(rend);
+			
+			}
+		}
 
 }
