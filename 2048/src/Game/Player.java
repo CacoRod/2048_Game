@@ -62,7 +62,7 @@ public class Player
 			movement();	
 		}
 				
-				
+	
 		if (movement == 'w') {
 			getMoves().moveUp();
 			System.out.println("\n");	
@@ -84,7 +84,11 @@ public class Player
 			}
 		game.revertBlockedField(getMoves(), this);
 		moves.consoleRender();
-		System.out.println("===============================================");
+		System.out.println("===============================================\n"
+				+ "===============================================\n"
+				+ "===============================================\n"
+				+ "===============================================\n"
+				+ "===============================================");
 	}
 
 	public void applyPowerUp(PowerUp buff)
@@ -92,16 +96,4 @@ public class Player
 		game.powerUpTrigger(buff, this);
 	}
 	
-	public void consoleRender() {
-		System.out.println(getName());
-		for (int fila = 0; fila<=moves.getTable().length-1; fila++) {
-			String rend = "";
-			for (int columna = 0; columna<=moves.getTable().length-1; columna++) {
-				rend += (moves.getFieldValue(fila, columna) + "\t");
-			}
-			System.out.println(rend);
-			
-			}
-		}
-
 }

@@ -5,7 +5,7 @@ public class Board{
 	private Field[][] table = { {new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
-								{new Field(2,this),new Field(0,this),new Field(0,this),new Field(0,this)}
+								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)}
 							};
 
 	private Player player;
@@ -199,6 +199,7 @@ public class Board{
 			if (getFieldValue(a, b) == 0 && !(table[a][b] instanceof PBlockedField)) {
 				if (c == 0)	table[a][b] = new Field(2,this, randomPowerUp());
 				else table[a][b] = new Field(2,this);
+				done = true;
 			}
 		}
 	}
