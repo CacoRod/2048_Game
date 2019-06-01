@@ -190,16 +190,24 @@ public class Board{
 	
 	private void fieldSpawner()
 	{
-		boolean done = false;
-		int c = (int) ((Math.random()*Math.random() * 20));
-		while (!done) {
-			int a = (int) ((Math.random()*Math.random() * 4));
-			int b = (int) ((Math.random()*Math.random() * 4));
-
-			if (getFieldValue(a, b) == 0 && !(table[a][b] instanceof PBlockedField)) {
-				if (c == 0)	table[a][b] = new Field(2,this, randomPowerUp());
-				else table[a][b] = new Field(2,this);
-				done = true;
+		if (!isFull()) {
+			boolean done = false;
+			int c = (int) ((Math.random()*Math.random() * 20));
+			while (!done) {
+				int a = (int) ((Math.random()*Math.random() * 4));
+				int b = (int) ((Math.random()*Math.random() * 4));
+		
+				if (getFieldValue(a, b) == 0 && !(table[a][b] instanceof PBlockedField)) {
+					if (c == 0)	{
+						table[a][b] = new Field(2,this, randomPowerUp());
+						System.out.println("a FIELD has SPAWNED at [" + a + "][" + b + "] with a POWER UP!");
+					}
+					else {
+						table[a][b] = new Field(2,this);
+						System.out.println("a FIELD has SPAWNED at [" + a + "][" + b + "]");
+					}
+					done = true;
+				}
 			}
 		}
 	}

@@ -50,38 +50,46 @@ public class Player
 	
 	public void movement() 
 	{
-		System.out.println(getName());
+		System.out.println(getName().toUpperCase());
 		moves.consoleRender();
+		boolean done = false;
 		
-		Scanner scanner = new Scanner(System.in);
-		String scan = scanner.nextLine();
-		char movement = scan.charAt(0);
-				
-		if (movement == 'h') {
-			game.help();
-			movement();	
-		}
-				
-	
-		if (movement == 'w') {
-			getMoves().moveUp();
-			System.out.println("\n");	
-		}
-				
-		if (movement == 'a') {
-			getMoves().moveLeft();
-			System.out.println("\n");	
-		}
-				
-		if (movement == 'd') {
-			getMoves().moveRight();
-			System.out.println("\n");
-		}
-		
-		if (movement == 's') {
-			getMoves().moveDown();
-			System.out.println("\n");	
+		while (!done) {
+			Scanner scanner = new Scanner(System.in);
+			String scan = scanner.nextLine();
+			if (scan.isEmpty()) scan = "fff";
+			char movement = scan.charAt(0);
+					
+			if (movement == 'h') {
+				game.help();
+				movement();	
+				done = true;
 			}
+					
+			if (movement == 'w') {
+				getMoves().moveUp();
+				System.out.println("\n");
+				done = true;
+			}
+					
+			if (movement == 'a') {
+				getMoves().moveLeft();
+				System.out.println("\n");
+				done = true;
+			}
+					
+			if (movement == 'd') {
+				getMoves().moveRight();
+				System.out.println("\n");
+				done = true;
+			}
+			
+			if (movement == 's') {
+				getMoves().moveDown();
+				System.out.println("\n");
+				done = true;
+				}
+		}
 		game.revertBlockedField(getMoves(), this);
 		moves.consoleRender();
 		System.out.println("===============================================\n"
