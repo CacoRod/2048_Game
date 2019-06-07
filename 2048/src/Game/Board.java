@@ -2,8 +2,8 @@ package Game;
 
 public class Board{
 	
-	private Field[][] table = { {new Field(2,this),new Field(2,this, new PowerUpMove()),new Field(0,this),new Field(0,this)},
-								{new Field(2,this),new Field(2,this),new Field(0,this),new Field(0,this)},
+	private Field[][] table = { {new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
+								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)}
 							};
@@ -262,7 +262,8 @@ public class Board{
 	
 	public PowerUp randomPowerUp() 
 	{
-		int a = (int) ((Math.random()*Math.random() * 4));
+		//int a = (int) ((Math.random()*Math.random() * 4));
+		int a = 2;
 		if (a == 0) return new PowerUpBlock();
 		if (a == 1) return new PowerUpRemove();
 		if (a == 2) return new PowerUpMove();

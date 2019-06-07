@@ -86,18 +86,21 @@ public class Player
 				getMoves().moveLeft();
 				System.out.println("\n");
 				done = true;
+				if (isMoveAffected()) game.moveDebuffLeft(getMoves(), this);
 			}
 					
 			if (movement == 'd') {
 				getMoves().moveRight();
 				System.out.println("\n");
 				done = true;
+				if (isMoveAffected()) game.moveDebuffRight(getMoves(), this);
 			}
 			
 			if (movement == 's') {
 				getMoves().moveDown();
 				System.out.println("\n");
 				done = true;
+				if (isMoveAffected()) game.moveDebuffDown(getMoves(), this);
 				}
 		}
 		game.revertBlockedField(getMoves(), this);
