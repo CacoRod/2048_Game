@@ -2,10 +2,10 @@ package Game;
 
 public class Board{
 	
-	private Field[][] table = { {new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
+	private Field[][] table = { {new Field(2,this),new Field(2,this, new PowerUpMove()),new Field(0,this),new Field(0,this)},
+								{new Field(2,this),new Field(2,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
-								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
-								{new Field(2,this),new Field(0,this),new Field(0,this),new Field(0,this)}
+								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)}
 							};
 
 	private Player player;
@@ -13,8 +13,8 @@ public class Board{
 	
 	public Board() 
 	{
-		fieldSpawner();
-		fieldSpawner();
+		fieldSpawnerFirstRound();
+		fieldSpawnerFirstRound();
 	}
 
 	public Field[][] getTable() 
@@ -70,7 +70,6 @@ public class Board{
 				}
 			}
 		}
-		fieldSpawner();
 	}
 	
 	
@@ -102,7 +101,6 @@ public class Board{
 				}
 			}
 		}
-		fieldSpawner();
 	}
 	
 	
@@ -134,7 +132,6 @@ public class Board{
 				}
 			}
 		}
-		fieldSpawner();
 	}
 	
 	
@@ -167,7 +164,6 @@ public class Board{
 				}
 			}
 		}
-		fieldSpawner();
 	}
 	
 	public void consoleRender() {
@@ -188,21 +184,42 @@ public class Board{
 	}
 	
 	
-	private void fieldSpawner()
+	public void fieldSpawner()
 	{
-		boolean done = false;
-		int c = (int) ((Math.random()*Math.random() * 20));
-		while (!done) {
-			int a = (int) ((Math.random()*Math.random() * 4));
-			int b = (int) ((Math.random()*Math.random() * 4));
-
-			if (getFieldValue(a, b) == 0 && !(table[a][b] instanceof PBlockedField)) {
-				if (c == 0)	table[a][b] = new Field(2,this, randomPowerUp());
-				else table[a][b] = new Field(2,this);
+		if (!isFull()) {
+			boolean done = false;
+			int c = (int) ((Math.random()*Math.random() * 20));
+			while (!done) {
+				int a = (int) ((Math.random()*Math.random() * 4));
+				int b = (int) ((Math.random()*Math.random() * 4));
+		
+				if (getFieldValue(a, b) == 0 && !(table[a][b] instanceof PBlockedField)) {
+					if (c == 0)	{
+						table[a][b] = new Field(2,this, randomPowerUp());
+						System.out.println("a FIELD has SPAWNED at [" + a + "][" + b + "] with a POWER UP!");
+					}
+					else {
+						table[a][b] = new Field(2,this);
+						System.out.println("a FIELD has SPAWNED at [" + a + "][" + b + "]");
+					}
+					done = true;
+				}
 			}
 		}
 	}
 	
+	private void fieldSpawnerFirstRound()
+	{
+			boolean done = false;
+			while (!done) {
+				int a = (int) ((Math.random()*Math.random() * 4));
+				int b = (int) ((Math.random()*Math.random() * 4));
+				if (getFieldValue(a, b) == 0) {
+					table[a][b] = new Field(2,this);
+					done = true;
+			}
+		}
+	}
 	public boolean isFull() 
 	{
 		for (int fila = 0; fila<=table.length-1; fila++) {

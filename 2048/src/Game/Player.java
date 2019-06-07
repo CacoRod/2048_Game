@@ -8,8 +8,18 @@ public class Player
 	private Board moves;
 	private String name;
 	private Game game;
+	private boolean moveAffected;
 	
 	
+	
+	public boolean isMoveAffected(){
+		return moveAffected;
+	}
+	
+	public void setMoveAffected(boolean debuff) 
+	{
+		this.moveAffected = debuff;
+	}
 	public Game getGame() 
 	{
 		return game;
@@ -42,7 +52,6 @@ public class Player
 	
 	public Player(String name) 
 	{ 
-		
 		setName(name);
 		setMoves(new Board());
 		getMoves().setPlayer(this);
@@ -50,41 +59,56 @@ public class Player
 	
 	public void movement() 
 	{
-		System.out.println(getName());
+		System.out.println(getName().toUpperCase());
 		moves.consoleRender();
+		boolean done = false;
 		
-		Scanner scanner = new Scanner(System.in);
-		String scan = scanner.nextLine();
-		char movement = scan.charAt(0);
-				
-		if (movement == 'h') {
-			game.help();
-			movement();	
-		}
-				
-				
-		if (movement == 'w') {
-			getMoves().moveUp();
-			System.out.println("\n");	
-		}
-				
-		if (movement == 'a') {
-			getMoves().moveLeft();
-			System.out.println("\n");	
-		}
-				
-		if (movement == 'd') {
-			getMoves().moveRight();
-			System.out.println("\n");
-		}
-		
-		if (movement == 's') {
-			getMoves().moveDown();
-			System.out.println("\n");	
+		while (!done) {
+			Scanner scanner = new Scanner(System.in);
+			String scan = scanner.nextLine();
+			if (scan.isEmpty()) scan = "fff";
+			char movement = scan.charAt(0);
+					
+			if (movement == 'h') {
+				game.help();
+				movement();	
+				done = true;
 			}
+					
+			if (movement == 'w') {
+				getMoves().moveUp();
+				System.out.println("\n");
+				done = true;
+				if (isMoveAffected()) game.moveDebuffUp(getMoves(), this);
+			}
+					
+			if (movement == 'a') {
+				getMoves().moveLeft();
+				System.out.println("\n");
+				done = true;
+			}
+					
+			if (movement == 'd') {
+				getMoves().moveRight();
+				System.out.println("\n");
+				done = true;
+			}
+			
+			if (movement == 's') {
+				getMoves().moveDown();
+				System.out.println("\n");
+				done = true;
+				}
+		}
 		game.revertBlockedField(getMoves(), this);
+		setMoveAffected(false);
+		moves.fieldSpawner();
 		moves.consoleRender();
-		System.out.println("===============================================");
+		System.out.println("===============================================\n"
+				+ "===============================================\n"
+				+ "===============================================\n"
+				+ "===============================================\n"
+				+ "===============================================");
 	}
 
 	public void applyPowerUp(PowerUp buff)
@@ -92,16 +116,4 @@ public class Player
 		game.powerUpTrigger(buff, this);
 	}
 	
-	public void consoleRender() {
-		System.out.println(getName());
-		for (int fila = 0; fila<=moves.getTable().length-1; fila++) {
-			String rend = "";
-			for (int columna = 0; columna<=moves.getTable().length-1; columna++) {
-				rend += (moves.getFieldValue(fila, columna) + "\t");
-			}
-			System.out.println(rend);
-			
-			}
-		}
-
 }
