@@ -8,8 +8,18 @@ public class Player
 	private Board moves;
 	private String name;
 	private Game game;
+	private boolean moveAffected;
 	
 	
+	
+	public boolean isMoveAffected(){
+		return moveAffected;
+	}
+	
+	public void setMoveAffected(boolean debuff) 
+	{
+		this.moveAffected = debuff;
+	}
 	public Game getGame() 
 	{
 		return game;
@@ -42,7 +52,6 @@ public class Player
 	
 	public Player(String name) 
 	{ 
-		
 		setName(name);
 		setMoves(new Board());
 		getMoves().setPlayer(this);
@@ -70,6 +79,7 @@ public class Player
 				getMoves().moveUp();
 				System.out.println("\n");
 				done = true;
+				if (isMoveAffected()) game.moveDebuffUp(getMoves(), this);
 			}
 					
 			if (movement == 'a') {
@@ -91,6 +101,8 @@ public class Player
 				}
 		}
 		game.revertBlockedField(getMoves(), this);
+		setMoveAffected(false);
+		moves.fieldSpawner();
 		moves.consoleRender();
 		System.out.println("===============================================\n"
 				+ "===============================================\n"
