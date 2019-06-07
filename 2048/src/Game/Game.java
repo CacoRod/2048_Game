@@ -74,6 +74,57 @@ public class Game
 		done = true;
 		}
 	}
+	
+	public void moveDebuffDown(Board board, Player player) 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * board.getTable().length));
+			for (int contador=1; contador<=4; contador ++ ) {
+				for (int fila=board.getTable().length - 1; fila>0;fila--) {
+					if (board.getFieldValue(fila-1,a) == 0) {
+						board.getTable()[fila-1][a].sum(board.getTable()[fila][a]);	
+					}
+				}
+			}
+		System.out.println("ROW [" + a +"] from " + player.getName() + " has MOVED in the opossite direction");
+		done = true;
+		}
+	}
+	
+	public void moveDebuffLeft(Board board, Player player) 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * board.getTable().length));
+			for (int contador=1; contador<=4; contador ++ ) {
+				for (int columna=0; columna< board.getTable().length - 1;columna++) {
+					if (board.getFieldValue(a,columna+1) == 0) {
+						board.getTable()[a][columna+1].sum(board.getTable()[a][columna]);	
+					}
+				}
+			}
+		System.out.println("COLUMN [" + a +"] from " + player.getName() + " has MOVED in the opossite direction");
+		done = true;
+		}
+	}
+	
+	public void moveDebuffRight(Board board, Player player) 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * board.getTable().length));
+			for (int contador=1; contador<=4; contador ++ ) {
+				for (int columna=board.getTable().length - 1; columna>0;columna--) {
+					if (board.getFieldValue(a,columna-1) == 0) {
+						board.getTable()[a][columna-1].sum(board.getTable()[a][columna]);	
+					}
+				}
+			}
+		System.out.println("COLUMN [" + a +"] from " + player.getName() + " has MOVED in the opossite direction");
+		done = true;
+		}
+	}
 
 	public void divideField(Board board, Player player) 
 	{
