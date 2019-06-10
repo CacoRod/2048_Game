@@ -59,13 +59,13 @@ public class Player
 	
 	public void movement() 
 	{
-		System.out.println(getName().toUpperCase());
+		System.out.println("\t////////" + getName().toUpperCase() + "\\\\\\\\\\\\\\\\\\");
 		moves.consoleRender();
 		boolean done = false;
 		
 		while (!done) {
 			Scanner scanner = new Scanner(System.in);
-			String scan = scanner.nextLine();
+			String scan = scanner.nextLine().toLowerCase();
 			if (scan.isEmpty()) scan = "fff";
 			char movement = scan.charAt(0);
 					
@@ -79,44 +79,40 @@ public class Player
 				getMoves().moveUp();
 				System.out.println("\n");
 				done = true;
-				if (isMoveAffected()) game.moveDebuffUp(getMoves(), this);
+				if (isMoveAffected()) moves.moveDebuffUp();
 			}
 					
 			if (movement == 'a') {
 				getMoves().moveLeft();
 				System.out.println("\n");
 				done = true;
-				if (isMoveAffected()) game.moveDebuffLeft(getMoves(), this);
+				if (isMoveAffected()) moves.moveDebuffLeft();
 			}
 					
 			if (movement == 'd') {
 				getMoves().moveRight();
 				System.out.println("\n");
 				done = true;
-				if (isMoveAffected()) game.moveDebuffRight(getMoves(), this);
+				if (isMoveAffected()) moves.moveDebuffRight();
 			}
 			
 			if (movement == 's') {
 				getMoves().moveDown();
 				System.out.println("\n");
 				done = true;
-				if (isMoveAffected()) game.moveDebuffDown(getMoves(), this);
+				if (isMoveAffected()) moves.moveDebuffDown();
 				}
 		}
-		game.revertBlockedField(getMoves(), this);
+		moves.revertBlockedField();
 		setMoveAffected(false);
 		moves.fieldSpawner();
 		moves.consoleRender();
-		System.out.println("===============================================\n"
+		System.out.println(
+				"===============================================\n"
 				+ "===============================================\n"
 				+ "===============================================\n"
 				+ "===============================================\n"
 				+ "===============================================");
 	}
 
-	public void applyPowerUp(PowerUp buff)
-	{
-		game.powerUpTrigger(buff, this);
-	}
-	
 }

@@ -7,6 +7,16 @@ public class Field
 	private PowerUp buff;
 	private Board board;
 	
+	
+	
+	private Player getPlayer() 
+	{
+		return board.getPlayer();
+	}
+	private Game getGame() 
+	{
+		return board.getPlayer().getGame();
+	}
 	public Board getBoard()
 	{
 		return board;
@@ -56,11 +66,11 @@ public class Field
 	{
 		if (!(this instanceof PBlockedField) && !(other instanceof PBlockedField)) {
 			if (hasPowerUp() && other.value != 0) {
-				board.powerUpFound(getBuff());
+				getGame().powerUpTrigger(getBuff(), getPlayer());
 				setBuff(null);
 			}
 			if (other.hasPowerUp() && value != 0) { 
-				board.powerUpFound(other.getBuff());
+				getGame().powerUpTrigger(other.getBuff(), getPlayer());
 				other.setBuff(null);
 			}
 			setValue(value += other.value);

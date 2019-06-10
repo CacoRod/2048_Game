@@ -168,7 +168,7 @@ public class Board{
 	
 	public void consoleRender() {
 		for (int fila = 0; fila<=table.length-1; fila++) {
-			String rend = "";
+			String rend = "\t";
 			for (int columna = 0; columna<=table.length-1; columna++) {
 				if (table[fila][columna] instanceof PBlockedField) rend += "B(" +getFieldValue(fila, columna) + ")\t";
 				else{
@@ -178,6 +178,7 @@ public class Board{
 				rend += "\t";
 				}
 			}
+			rend += "\n";
 			System.out.println(rend);
 			
 			}
@@ -196,11 +197,11 @@ public class Board{
 				if (getFieldValue(a, b) == 0 && !(table[a][b] instanceof PBlockedField)) {
 					if (c == 0)	{
 						table[a][b] = new Field(2,this, randomPowerUp());
-						System.out.println("a FIELD has SPAWNED at [" + a + "][" + b + "] with a POWER UP!");
+						System.out.println("a FIELD has SPAWNED at [" + a + "][" + b + "] with a POWER UP!\n");
 					}
 					else {
 						table[a][b] = new Field(2,this);
-						System.out.println("a FIELD has SPAWNED at [" + a + "][" + b + "]");
+						System.out.println("a FIELD has SPAWNED at [" + a + "][" + b + "]\n");
 					}
 					done = true;
 				}
@@ -254,20 +255,138 @@ public class Board{
 	{
 		return (isFull() && !checkSumHorizontal() && !checkSumVertical());
 	}
-	
-	public void powerUpFound(PowerUp buff)
-	{
-		player.applyPowerUp(buff);
-	}
-	
+
 	public PowerUp randomPowerUp() 
 	{
-		//int a = (int) ((Math.random()*Math.random() * 4));
-		int a = 2;
+		int a = (int) ((Math.random()*Math.random() * 4));
 		if (a == 0) return new PowerUpBlock();
 		if (a == 1) return new PowerUpRemove();
 		if (a == 2) return new PowerUpMove();
 		if (a == 3) return new PowerUpDivide();
 		return null;
 	}
+	
+	
+	public void blockField() 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * table.length));
+			int b = (int) ((Math.random()*Math.random() * table.length));
+			if (getFieldValue(a,b) != 0) {
+				table[a][b] = new PBlockedField(getFieldValue(a, b));
+				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been BLOCKED\n");
+				done = true;
+			}
+		}
+	}
+	
+	public void revertBlockedField()
+	{
+		for (int fila = 0; fila<=table.length-1; fila++) {
+			for (int columna = 0; columna<=table.length-1; columna++) {
+				if (table[fila][columna] instanceof PBlockedField) {
+					table[fila][columna] = new Field(getFieldValue(fila,columna), this);
+					System.out.println("FIELD [" + fila + "][" + columna + "] from " + player.getName().toUpperCase() + " has been UNBLOCKED\n");
+				}
+			}
+		}
+	}
+	
+	public void moveDebuffUp() 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * table.length));
+			for (int contador=1; contador<=4; contador ++ ) {
+				for (int fila=0; fila< table.length - 1;fila++) {
+					if (getFieldValue(fila+1,a) == 0) {
+						table[fila+1][a].sum(table[fila][a]);	
+					}
+				}
+			}
+		System.out.println("ROW [" + a +"] from " + player.getName().toUpperCase() + " has MOVED in the opossite direction\n");
+		done = true;
+		}
+	}
+	
+	public void moveDebuffDown() 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * table.length));
+			for (int contador=1; contador<=4; contador ++ ) {
+				for (int fila=table.length - 1; fila>0;fila--) {
+					if (getFieldValue(fila-1,a) == 0) {
+						table[fila-1][a].sum(table[fila][a]);	
+					}
+				}
+			}
+		System.out.println("ROW [" + a +"] from " + player.getName().toUpperCase() + " has MOVED in the opossite direction\n");
+		done = true;
+		}
+	}
+	
+	public void moveDebuffLeft() 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * table.length));
+			for (int contador=1; contador<=4; contador ++ ) {
+				for (int columna=0; columna< table.length - 1;columna++) {
+					if (getFieldValue(a,columna+1) == 0) {
+						table[a][columna+1].sum(table[a][columna]);	
+					}
+				}
+			}
+		System.out.println("COLUMN [" + a +"] from " + player.getName().toUpperCase() + " has MOVED in the opossite direction\n");
+		done = true;
+		}
+	}
+	
+	public void moveDebuffRight() 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * table.length));
+			for (int contador=1; contador<=4; contador ++ ) {
+				for (int columna=table.length - 1; columna>0;columna--) {
+					if (getFieldValue(a,columna-1) == 0) {
+						table[a][columna-1].sum(table[a][columna]);	
+					}
+				}
+			}
+		System.out.println("COLUMN [" + a +"] from " + player.getName().toUpperCase() + " has MOVED in the opossite direction\n");
+		done = true;
+		}
+	}
+
+	public void divideField() 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * table.length));
+			int b = (int) ((Math.random()*Math.random() * table.length));
+			if (getFieldValue(a,b) != 0 && getFieldValue(a,b) != 2 ) {
+				table[a][b].setValue(getFieldValue(a,b)/2);;
+				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been DIVIDED\n");
+				done = true;
+			}
+		}
+	}
+	
+	public void removeField() 
+	{
+		boolean done = false;
+		while (done == false) {
+			int a = (int) ((Math.random()*Math.random() * table.length));
+			int b = (int) ((Math.random()*Math.random() * table.length));
+			if (getFieldValue(a,b) != 0 && !(table[a][b] instanceof PBlockedField)) {
+				table[a][b].setValue(0);;
+				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been REMOVED\n");
+				done = true;
+			}
+		}
+	}
+
 }
