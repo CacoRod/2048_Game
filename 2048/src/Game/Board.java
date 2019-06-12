@@ -372,6 +372,13 @@ public class Board{
 				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been DIVIDED\n");
 				done = true;
 			}
+			if (getFieldValue(a,b) == 2){
+				table[a][b].setValue(0);
+				table[a][b].setBuff(null);
+				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been DIVIDED...\n"
+						+ "since the value was 2, it has been REMOVED\n");
+				done = true;
+			}
 		}
 	}
 	
@@ -383,6 +390,7 @@ public class Board{
 			int b = (int) ((Math.random()*Math.random() * table.length));
 			if (getFieldValue(a,b) != 0 && !(table[a][b] instanceof PBlockedField)) {
 				table[a][b].setValue(0);;
+				table[a][b].setBuff(null);
 				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been REMOVED\n");
 				done = true;
 			}
