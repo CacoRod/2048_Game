@@ -60,8 +60,8 @@ public class Game
 		String help = "INSTRUCTIONS: \n"
 				+ "\nHow to Play:\n"
 				+ "\nTwo players, each with its board(4x4) must move the fields inside it. Each time a Player makes a move,\n"
-				+ "a new field spawns in his board.Should two fields of the same value clash, they'll add up into a single\n"
-				+ "field of greater value. Only fields of same value can add up. The game is done once a player can't make\n"
+				+ "a new field spawns in his board.Should two fields of the same value clash, they'll sum up into a single\n"
+				+ "field of greater value. Only fields of same value can do this. The game is done once a player can't make\n"
 				+ "any more moves, meaning the other player won\n"
 				+ "\n"
 				+ "\t2\t-\t-\t-\n"
@@ -85,8 +85,7 @@ public class Game
 				+ "a - move left\n"
 				+ "d - move right\n"
 				+ "h - press h at any time to bring up this menu\n"
-				+ "n - start a new game\n"
-				+ "l - load game saved\n";
+				+ "n - start a new game\n";
 				
 		System.out.println(help);
 	}
@@ -121,10 +120,6 @@ public class Game
 				gamePlay();
 				done = true;
 			}			
-			if (movement == 'l') {
-				loadGame(stringToJson());	
-				gamePlay();
-			}
 		}
 	}
 	
@@ -169,19 +164,19 @@ public class Game
 		return Jsoner.serialize(obj);
 	}
 	
-	public void loadGame(JsonObject obj) {
-		try {
-			this.setPlayer1(new Player((JsonObject) obj.get("player 1")));
-			this.setPlayer2(new Player((JsonObject) obj.get("player 2")));
-			this.getPlayer1().setGame(this);
-			this.getPlayer2().setGame(this);
-			this.getPlayer1().setName("player 1");
-			this.getPlayer2().setName("player 2");
-		} catch (Exception e) {
-			System.out.println("game roto: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}
+//	public void loadGame(JsonObject obj) {
+//		try {
+//			this.setPlayer1(new Player((JsonObject) obj.get("player 1")));
+//			this.setPlayer2(new Player((JsonObject) obj.get("player 2")));
+//			this.getPlayer1().setGame(this);
+//			this.getPlayer2().setGame(this);
+//			this.getPlayer1().setName("player 1");
+//			this.getPlayer2().setName("player 2");
+//		} catch (Exception e) {
+//			System.out.println("game roto: " + e.getMessage());
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public String readText() {
 		File file = new File("partida.txt"); 

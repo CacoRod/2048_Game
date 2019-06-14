@@ -61,13 +61,13 @@ public class Player
 		getMoves().setPlayer(this);
 	}
 	
-	public Player(JsonObject object) 
-	{ 
-		setName((String) object.get("nombre"));
-		setMoves(new Board((JsonArray) object.get("board")));
-		getMoves().setPlayer(this);
-	}
-	
+//	public Player(JsonObject object) 
+//	{ 
+//		setName((String) object.get("nombre"));
+//		setMoves(new Board((JsonArray) object.get("board")));
+//		getMoves().setPlayer(this);
+//	}
+//	
 	public void movement() 
 	{
 		System.out.println("\t////////" + getName().toUpperCase() + "\\\\\\\\\\\\\\\\\\");
@@ -113,21 +113,14 @@ public class Player
 				done = true;
 				if (isMoveAffected()) moves.moveDebuffDown();
 				}
-			
-			if (movement == 'g') {
-				System.out.println(game.saveGame());
-				game.guardarArchivo();
-				movement();	
-				System.out.println("archivo guardado");
-				done = true;
-			}
+
 		}
 		moves.revertBlockedField();
 		setMoveAffected(false);
 		moves.fieldSpawner();
 		moves.consoleRender();
 		System.out.println(
-				"===============================================\n"
+				  "===============================================\n"
 				+ "===============================================\n"
 				+ "===============================================\n"
 				+ "===============================================\n"

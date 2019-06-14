@@ -6,6 +6,10 @@ import com.github.cliftonlabs.json_simple.JsonObject;
 
 public class Board{
 	
+	public void setTable(Field[][] table) {
+		this.table = table;
+	}
+
 	private Field[][] table = { {new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
 								{new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
