@@ -133,6 +133,7 @@ public class Player
 				+ "===============================================\n"
 				+ "===============================================");
 	}
+
 	
 	
 	com.github.cliftonlabs.json_simple.JsonObject obj = new com.github.cliftonlabs.json_simple.JsonObject();
@@ -147,5 +148,6 @@ public class Player
 		obj.get("name");
 		return obj;
 	}
+
 
 }
