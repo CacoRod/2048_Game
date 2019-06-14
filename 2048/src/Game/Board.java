@@ -288,7 +288,7 @@ public class Board{
 			int a = (int) ((Math.random()*Math.random() * table.length));
 			int b = (int) ((Math.random()*Math.random() * table.length));
 			if (getFieldValue(a,b) != 0) {
-				table[a][b] = new PBlockedField(getFieldValue(a, b));
+				table[a][b] = new PBlockedField(getFieldValue(a, b), table[a][b].getBuff());
 				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been BLOCKED\n");
 				done = true;
 			}
@@ -300,7 +300,7 @@ public class Board{
 		for (int fila = 0; fila<=table.length-1; fila++) {
 			for (int columna = 0; columna<=table.length-1; columna++) {
 				if (table[fila][columna] instanceof PBlockedField) {
-					table[fila][columna] = new Field(getFieldValue(fila,columna), this);
+					table[fila][columna] = new Field(getFieldValue(fila,columna), this, table[fila][columna].getBuff());
 					System.out.println("FIELD [" + fila + "][" + columna + "] from " + player.getName().toUpperCase() + " has been UNBLOCKED\n");
 				}
 			}
