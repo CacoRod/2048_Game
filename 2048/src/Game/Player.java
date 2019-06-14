@@ -2,6 +2,10 @@ package Game;
 
 import java.util.Scanner;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+
+
+
 public class Player
 {
 	
@@ -57,6 +61,13 @@ public class Player
 		getMoves().setPlayer(this);
 	}
 	
+	public Player(JsonObject object) 
+	{ 
+		setName((String) object.get("nombre"));
+		setMoves(new Board((JsonArray) object.get("board")));
+		getMoves().setPlayer(this);
+	}
+	
 	public void movement() 
 	{
 		System.out.println("\t////////" + getName().toUpperCase() + "\\\\\\\\\\\\\\\\\\");
@@ -102,6 +113,14 @@ public class Player
 				done = true;
 				if (isMoveAffected()) moves.moveDebuffDown();
 				}
+			
+			if (movement == 'g') {
+				System.out.println(game.saveGame());
+				game.guardarArchivo();
+				movement();	
+				System.out.println("archivo guardado");
+				done = true;
+			}
 		}
 		moves.revertBlockedField();
 		setMoveAffected(false);
@@ -114,5 +133,21 @@ public class Player
 				+ "===============================================\n"
 				+ "===============================================");
 	}
+
+	
+	
+	com.github.cliftonlabs.json_simple.JsonObject obj = new com.github.cliftonlabs.json_simple.JsonObject();
+	
+	public JsonObject savePlayer() {
+		obj.put("board", moves.saveBoard());
+		obj.put("name", getName());
+		return obj;
+	}
+	
+	public JsonObject loadPlayer() {
+		obj.get("name");
+		return obj;
+	}
+
 
 }

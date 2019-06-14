@@ -1,6 +1,16 @@
 package Game;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
+
+import com.github.cliftonlabs.json_simple.JsonObject;
+import com.github.cliftonlabs.json_simple.Jsoner;
+
 
 //tiene dos jugador. Tiene que poder iniciar una nueva partida, restartearla, cargar y guardar
 public class Game
@@ -75,7 +85,8 @@ public class Game
 				+ "a - move left\n"
 				+ "d - move right\n"
 				+ "h - press h at any time to bring up this menu\n"
-				+ "n - start a new game\n";
+				+ "n - start a new game\n"
+				+ "l - load game saved\n";
 				
 		System.out.println(help);
 	}
@@ -109,7 +120,95 @@ public class Game
 			if (movement == 'n') {
 				gamePlay();
 				done = true;
+			}			
+			if (movement == 'l') {
+				loadGame(stringToJson());	
+				gamePlay();
 			}
 		}
 	}
+	
+	
+	public JsonObject stringToJson() {
+		
+		JsonObject j = null;
+		try {
+		j = (JsonObject)Jsoner.deserialize(readText());
+		} catch(Exception e)  {
+			System.out.println("puto " + e.getMessage());
+		}
+		return j;
+		}
+	
+	public void guardarArchivo() {
+		try (PrintWriter out = new PrintWriter("partida.txt")) {
+		    out.println(saveGame());
+		} catch (FileNotFoundException e) {
+			System.out.println("no se pudo guardar el archivo");
+		}
+	}
+	
+	public Player getPlayer1() {
+		return player1;
+	}
+	public void setPlayer1(Player player1) {
+		this.player1 = player1;
+	}
+	public Player getPlayer2() {
+		return player2;
+	}
+	public void setPlayer2(Player player2) {
+		this.player2 = player2;
+	}
+	
+	
+	public String saveGame() {
+		JsonObject obj = new JsonObject();
+		obj.put("player 1", player1.savePlayer());
+		obj.put("player 2", player2.savePlayer());
+		return Jsoner.serialize(obj);
+	}
+	
+	public void loadGame(JsonObject obj) {
+		try {
+			this.setPlayer1(new Player((JsonObject) obj.get("player 1")));
+			this.setPlayer2(new Player((JsonObject) obj.get("player 2")));
+			this.getPlayer1().setGame(this);
+			this.getPlayer2().setGame(this);
+			this.getPlayer1().setName("player 1");
+			this.getPlayer2().setName("player 2");
+		} catch (Exception e) {
+			System.out.println("game roto: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	public String readText() {
+		File file = new File("partida.txt"); 
+		  
+		  BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e) {
+			System.out.println("no se encuentra el archivo");
+		} 
+		  
+		  String st = ""; 
+		  try {
+			while ((st = br.readLine()) != null) 
+			    System.out.println(st);
+		} catch (IOException e) {
+			System.out.println("no se encuentra el archivo");
+		}  
+		  return st;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

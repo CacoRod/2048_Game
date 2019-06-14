@@ -1,5 +1,9 @@
 package Game;
 
+import java.math.BigDecimal;
+
+import com.github.cliftonlabs.json_simple.JsonObject;
+
 public class Field
 {
 	// casillero. Contiene un valor y posiblemente un powerup
@@ -62,6 +66,13 @@ public class Field
 		setBoard(board);
 		
 	}
+	
+	public Field(Object value) {
+		setValue((int)((BigDecimal)value).longValue());
+		setBoard(board);
+	}
+	
+	
 	public void sum(Field other)
 	{
 		if (!(this instanceof PBlockedField) && !(other instanceof PBlockedField)) {
@@ -89,6 +100,25 @@ public class Field
 	public boolean hasPowerUp()
 	{
 		return (this.getBuff() != null);
+	}
+	
+	
+	com.github.cliftonlabs.json_simple.JsonObject obj = new com.github.cliftonlabs.json_simple.JsonObject();
+	
+	public JsonObject saveField() {
+			
+		obj.put("value", getValue());
+			
+		
+		return obj;
+	}
+	
+	public JsonObject loadField() {
+		
+		obj.get("value");
+		obj.get("buff");
+		
+		return obj;
 	}
 
 }

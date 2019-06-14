@@ -1,5 +1,9 @@
 package Game;
 
+import com.github.cliftonlabs.json_simple.JsonArray;
+import com.github.cliftonlabs.json_simple.JsonObject;
+
+
 public class Board{
 	
 	private Field[][] table = { {new Field(0,this),new Field(0,this),new Field(0,this),new Field(0,this)},
@@ -16,6 +20,12 @@ public class Board{
 		fieldSpawnerFirstRound();
 		fieldSpawnerFirstRound();
 	}
+	
+	public Board(JsonArray jsonArray) 
+	{
+		loadBoard(jsonArray);
+	}
+
 
 	public Field[][] getTable() 
 	{
@@ -395,6 +405,38 @@ public class Board{
 				done = true;
 			}
 		}
+  }
+	
+	com.github.cliftonlabs.json_simple.JsonObject obj = new com.github.cliftonlabs.json_simple.JsonObject();
+	
+	public JsonArray saveBoard() {
+		
+		JsonArray jsonBoard = new JsonArray();
+		for (int i = 0; i < table.length; i++) {
+			JsonArray jsonArray = new JsonArray();
+			for (int j = 0; j < table.length; j++) {
+				obj.put("field", getFieldValue(i, j));
+				jsonArray.add(obj);
+			}
+			jsonBoard.add(jsonArray);
+		}
+
+		
+		return jsonBoard;
 	}
+	
+	public void loadBoard(JsonArray array) {
+		for (int i = 0; i < array.size(); i++) {
+			Object[] fields = array.getCollection(i).toArray();			
+			for (int j = 0; j < fields.length; j++) {
+				
+				this.table[i][j] = new Field(((JsonObject) fields[j]).get("field"));
+				this.table[i][j].setBoard(this);
+			}
+		}
+		
+	}
+	
+
 
 }
