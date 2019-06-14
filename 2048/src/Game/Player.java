@@ -2,6 +2,10 @@ package Game;
 
 import java.util.Scanner;
 
+import com.github.cliftonlabs.json_simple.JsonObject;
+
+
+
 public class Player
 {
 	
@@ -57,15 +61,22 @@ public class Player
 		getMoves().setPlayer(this);
 	}
 	
+	public Player(JsonObject object) 
+	{ 
+		setName((String) object.get("nombre"));
+		setMoves(new Board((JsonArray) object.get("board")));
+		getMoves().setPlayer(this);
+	}
+	
 	public void movement() 
 	{
-		System.out.println(getName().toUpperCase());
+		System.out.println("\t////////" + getName().toUpperCase() + "\\\\\\\\\\\\\\\\\\");
 		moves.consoleRender();
 		boolean done = false;
 		
 		while (!done) {
 			Scanner scanner = new Scanner(System.in);
-			String scan = scanner.nextLine();
+			String scan = scanner.nextLine().toLowerCase();
 			if (scan.isEmpty()) scan = "fff";
 			char movement = scan.charAt(0);
 					
@@ -79,44 +90,62 @@ public class Player
 				getMoves().moveUp();
 				System.out.println("\n");
 				done = true;
-				if (isMoveAffected()) game.moveDebuffUp(getMoves(), this);
+				if (isMoveAffected()) moves.moveDebuffUp();
 			}
 					
 			if (movement == 'a') {
 				getMoves().moveLeft();
 				System.out.println("\n");
 				done = true;
-				if (isMoveAffected()) game.moveDebuffLeft(getMoves(), this);
+				if (isMoveAffected()) moves.moveDebuffLeft();
 			}
 					
 			if (movement == 'd') {
 				getMoves().moveRight();
 				System.out.println("\n");
 				done = true;
-				if (isMoveAffected()) game.moveDebuffRight(getMoves(), this);
+				if (isMoveAffected()) moves.moveDebuffRight();
 			}
 			
 			if (movement == 's') {
 				getMoves().moveDown();
 				System.out.println("\n");
 				done = true;
-				if (isMoveAffected()) game.moveDebuffDown(getMoves(), this);
+				if (isMoveAffected()) moves.moveDebuffDown();
 				}
+			
+			if (movement == 'g') {
+				System.out.println(game.saveGame());
+				game.guardarArchivo();
+				movement();	
+				System.out.println("archivo guardado");
+				done = true;
+			}
 		}
-		game.revertBlockedField(getMoves(), this);
+		moves.revertBlockedField();
 		setMoveAffected(false);
 		moves.fieldSpawner();
 		moves.consoleRender();
-		System.out.println("===============================================\n"
+		System.out.println(
+				"===============================================\n"
 				+ "===============================================\n"
 				+ "===============================================\n"
 				+ "===============================================\n"
 				+ "===============================================");
 	}
-
-	public void applyPowerUp(PowerUp buff)
-	{
-		game.powerUpTrigger(buff, this);
+	
+	
+	com.github.cliftonlabs.json_simple.JsonObject obj = new com.github.cliftonlabs.json_simple.JsonObject();
+	
+	public JsonObject savePlayer() {
+		obj.put("board", moves.saveBoard());
+		obj.put("name", getName());
+		return obj;
 	}
 	
+	public JsonObject loadPlayer() {
+		obj.get("name");
+		return obj;
+	}
+
 }
