@@ -26,6 +26,7 @@ public class Game
 	String goa_mes = "imput a value between 100 and 1000";
 	String goa_inv = "value must be between 100 and 1000";
 	String tie_mes = "TIE";
+	String lb_mes = "LAST BREATH!";
 	String mode= "GAME MODES: \n"
 			+ "1 - first to reach a certain ammount of points points is the winner\n"
 			+ "2 - first to run out of moves is the looser";
@@ -115,6 +116,7 @@ public class Game
 			goa_mes = "ingrese un valor entre 100 y 1000";
 			goa_inv = "el valor debe ser entre 100 y 1000";
 			tie_mes = "EMPATE";
+			lb_mes = "ULTIMO ALIENTO!";
 		}
 		else {
 			player1.setName("Player 1");
@@ -129,6 +131,7 @@ public class Game
 			goa_mes = "imput a value between 100 and 1000";
 			goa_inv = "value must be between 100 and 1000";
 			tie_mes = "TIE";
+			lb_mes = "LAST BREATH!";
 		}
 	}
 	
@@ -152,6 +155,7 @@ public class Game
 	
 	public void gamePlay_b(int goal) 
 	{
+		System.out.println(goal);
 		score_vis = true;
 		player1 = new Player(this);
 		player1.setName(player1.getName() + " 1");
@@ -164,14 +168,13 @@ public class Game
 				else player2.movement();
 				
 			}
-		if (turn == -1) player2.movement();
-		if (player1.getScore()>=goal && player2.getScore()>=goal ) {
-			System.out.println(tie_mes);
-		}
-		else {
+		System.out.println(lb_mes);
+		if (player1.getScore()>= goal) lastBreath(player2);
+		else lastBreath(player1);
+		player1.scoreMes();
+		player2.scoreMes();
 		if (player1.getScore()>=goal) System.out.println(player1.getName().toUpperCase() + win_mes);
 		else System.out.println(player2.getName().toUpperCase() + win_mes);
-		}
 	}
 	
 	
@@ -209,7 +212,7 @@ public class Game
 				    + "//////////   ///////////////////  ////////  ////////////////  //////////  ////////  /////////\n"
 				    + "/////////               ////////            ////////////////  //////////            /////////\n"
 				    + "/////////////////////////////////////////////////////////////////////////////////////////////\n"
-				    + "                                                                                     ver 1.16";
+				    + "                                                                                     ver 1.17";
 		System.out.println(menu);
 		help(language);;
 		boolean done = false;
@@ -375,6 +378,12 @@ public class Game
 		  return st;
 	}
 	
+	public void lastBreath(Player player) {
+		for (int a = 0; a<3 ; a++) {
+			player.movement();
+		}
+		
+	}
 	
 	
 	
