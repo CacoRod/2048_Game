@@ -73,6 +73,7 @@ public class Player
 		System.out.println("\t////////" + getName().toUpperCase() + "\\\\\\\\\\\\\\\\\\");
 		moves.consoleRender();
 		boolean done = false;
+		boolean done2 = false;
 		
 		while (!done) {
 			Scanner scanner = new Scanner(System.in);
@@ -84,35 +85,42 @@ public class Player
 				game.help();
 				movement();	
 				done = true;
+				done2 = true;
 			}
 					
-			if (movement == 'w') {
+			if ((movement == 'w') && (getMoves().canMoveUp())) {
 				getMoves().moveUp();
 				System.out.println("\n");
 				done = true;
+				done2 = true;
 				if (isMoveAffected()) moves.moveDebuffUp();
 			}
 					
-			if (movement == 'a') {
+			if ((movement == 'a') && (getMoves().canMoveLeft())) {
 				getMoves().moveLeft();
 				System.out.println("\n");
 				done = true;
+				done2 = true;
 				if (isMoveAffected()) moves.moveDebuffLeft();
 			}
 					
-			if (movement == 'd') {
+			if ((movement == 'd') && (getMoves().canMoveRight())) {
 				getMoves().moveRight();
 				System.out.println("\n");
 				done = true;
+				done2 = true;
 				if (isMoveAffected()) moves.moveDebuffRight();
 			}
 			
-			if (movement == 's') {
+			if ((movement == 's') && (getMoves().canMoveDown())) {
 				getMoves().moveDown();
 				System.out.println("\n");
 				done = true;
+				done2 = true;
 				if (isMoveAffected()) moves.moveDebuffDown();
 				}
+			
+			if (!done2) System.out.println("invalid input");
 
 		}
 		moves.revertBlockedField();

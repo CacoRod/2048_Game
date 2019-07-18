@@ -102,10 +102,12 @@ public class Game
 				    + "/////////////   ////////////////  ////////  ////////////////  //////////  ////////  /////////\n"
 				    + "//////////   ///////////////////  ////////  ////////////////  //////////  ////////  /////////\n"
 				    + "/////////               ////////            ////////////////  //////////            /////////\n"
-				    + "/////////////////////////////////////////////////////////////////////////////////////////////\n";
+				    + "/////////////////////////////////////////////////////////////////////////////////////////////\n"
+				    + "                                                                                     ver 1.01";
 		System.out.println(menu);
 		help();
 		boolean done = false;
+		boolean done2 = false;
 		while (!done) {
 			Scanner scanner = new Scanner(System.in);
 			String scan = scanner.nextLine().toLowerCase();
@@ -115,11 +117,14 @@ public class Game
 			if (movement == 'h') {
 				menu();
 				done = true;
+				done2 = true;
 			}
 			if (movement == 'n') {
 				gamePlay();
 				done = true;
-			}			
+				done2 = true;
+			}
+			if (!done2) System.out.println("invalid input");
 		}
 	}
 	
