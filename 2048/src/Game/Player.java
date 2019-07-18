@@ -14,8 +14,15 @@ public class Player
 	private Game game;
 	private boolean moveAffected;
 	
-	
-	
+	public void languageMes() {
+		if (getGame().language != 1) System.out.println("lenguage cambiado a ESPAÑOL");
+		else System.out.println("language set to ENGLISH");
+	}
+	                          
+	public void invalidMes() {
+		if (getGame().language != 1) System.out.println("comando invalido");
+		else System.out.println("invalid input");
+	}
 	public boolean isMoveAffected(){
 		return moveAffected;
 	}
@@ -54,11 +61,12 @@ public class Player
 		this.moves = moves;
 	}
 	
-	public Player(String name) 
+	public Player(Game game) 
 	{ 
-		setName(name);
-		setMoves(new Board());
-		getMoves().setPlayer(this);
+		if (game.language != 1) setName("Jugador");
+		else setName("Player");
+		setGame(game);
+		setMoves(new Board(this));
 	}
 	
 //	public Player(JsonObject object) 
@@ -82,7 +90,7 @@ public class Player
 			char movement = scan.charAt(0);
 					
 			if (movement == 'h') {
-				game.help();
+				game.help(getGame().language);
 				movement();	
 				done = true;
 				done2 = true;
@@ -120,7 +128,16 @@ public class Player
 				if (isMoveAffected()) moves.moveDebuffDown();
 				}
 			
-			if (!done2) System.out.println("invalid input");
+			if (movement == 'q'){
+				getGame().changeLanguage();
+				languageMes();
+				movement();
+				done = true;
+				done2 = true;
+				}
+			
+			
+			if (!done2) invalidMes();
 
 		}
 		moves.revertBlockedField();

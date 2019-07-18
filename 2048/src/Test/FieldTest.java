@@ -16,7 +16,7 @@ class FieldTest {
 		test = new Field(2,null);
 		test2 = new Field(2,null);
 		test3= new Field(4,null);
-		test4= new PBlockedField(2);
+		test4= new PBlockedField(2, null);
 	}
 
 	@AfterEach

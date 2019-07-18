@@ -17,10 +17,24 @@ public class Board{
 							};
 
 	private Player player;
+	private String field_mes;
+	private String from_mes;
+	private String move_mes;
+	private String row_mes;
+	private String col_mes;
+	private String bl_mes;
+	private String unbl_mes;
+	private String spawn_mes;
+	private String spawn_fol;
+	private String div_mes;
+	private String rem_mes;
+	private String div_fol;
+
 	
-	
-	public Board() 
+	public Board(Player player) 
 	{
+		setPlayer(player);
+		setLanguage();
 		fieldSpawnerFirstRound();
 		fieldSpawnerFirstRound();
 	}
@@ -53,9 +67,38 @@ public class Board{
 		this.player = player;
 	}
 
-	
-	
+	public void setLanguage()
+	{
+		field_mes = "FIELD [";
+		from_mes = "] from ";
+		move_mes = " has MOVED in the opossite direction\n";
+		row_mes = "ROW [";
+		col_mes = "COLUMN [";
+		bl_mes =" has been BLOCKED\n";
+		unbl_mes = " has been UNBLOCKED\n";
+		spawn_mes = "a FIELD has SPAWNED at [";
+		spawn_fol = "] with a POWER UP!\n";
+		div_mes = " has been DIVIDED\n";
+		rem_mes = " has been REMOVED \n";
+		div_fol = "...since the value was 2," + rem_mes;
+		
+		if (getPlayer().getGame().language != 1) {
+		field_mes = "CAMPO [";
+		from_mes = "] de ";
+		move_mes = " se a MOVIDO en la direccion opuesta\n";
+		row_mes = "FILA [";
+		col_mes = "COLUMNA [";
+		bl_mes =" fue BLOQUEADO\n";
+		unbl_mes = "fue DESBLOQUEADO\n";
+		spawn_mes = "un CAMPO ha APARECIDO [";
+		spawn_fol = "] con un POWER UP!\n";
+		div_mes = " fue DIVIDIDO\n";
+		rem_mes = " fue REMOVIDO \n";
+		div_fol = "...como su valor era 2," + rem_mes;
+		}
 
+	}
+	
 	public void sumLeft() 
 	{
 		for (int fila=0; fila<=table.length - 1; fila++) {
@@ -211,11 +254,11 @@ public class Board{
 				if (!(table[a][b].hasValue()) && !(table[a][b] instanceof PBlockedField)) {
 					if (c == 0)	{
 						table[a][b] = new Field(2,this, randomPowerUp());
-						System.out.println("a FIELD has SPAWNED at [" + a + "][" + b + "] with a POWER UP!\n");
+						System.out.println(spawn_mes + a + "][" + b + spawn_fol);
 					}
 					else {
 						table[a][b] = new Field(2,this);
-						System.out.println("a FIELD has SPAWNED at [" + a + "][" + b + "]\n");
+						System.out.println( spawn_mes + a + "][" + b + "]\n");
 					}
 					done = true;
 				}
@@ -323,7 +366,7 @@ public class Board{
 			int b = (int) ((Math.random()*Math.random() * table.length));
 			if (getFieldValue(a,b) != 0) {
 				table[a][b] = new PBlockedField(getFieldValue(a, b), table[a][b].getBuff());
-				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been BLOCKED\n");
+				System.out.println(field_mes + a + "][" + b + from_mes + player.getName().toUpperCase() + bl_mes);
 				done = true;
 			}
 		}
@@ -335,7 +378,7 @@ public class Board{
 			for (int columna = 0; columna<=table.length-1; columna++) {
 				if (table[fila][columna] instanceof PBlockedField) {
 					table[fila][columna] = new Field(getFieldValue(fila,columna), this, table[fila][columna].getBuff());
-					System.out.println("FIELD [" + fila + "][" + columna + "] from " + player.getName().toUpperCase() + " has been UNBLOCKED\n");
+					System.out.println(field_mes + fila + "][" + columna + from_mes + player.getName().toUpperCase() + unbl_mes);
 				}
 			}
 		}
@@ -353,7 +396,7 @@ public class Board{
 					}
 				}
 			}
-		System.out.println("ROW [" + a +"] from " + player.getName().toUpperCase() + " has MOVED in the opossite direction\n");
+		System.out.println(row_mes + a + from_mes + player.getName().toUpperCase() + move_mes);
 		done = true;
 		}
 	}
@@ -370,7 +413,7 @@ public class Board{
 					}
 				}
 			}
-		System.out.println("ROW [" + a +"] from " + player.getName().toUpperCase() + " has MOVED in the opossite direction\n");
+		System.out.println(row_mes + a + from_mes + player.getName().toUpperCase() + move_mes);
 		done = true;
 		}
 	}
@@ -387,7 +430,7 @@ public class Board{
 					}
 				}
 			}
-		System.out.println("COLUMN [" + a +"] from " + player.getName().toUpperCase() + " has MOVED in the opossite direction\n");
+		System.out.println(col_mes + a + from_mes + player.getName().toUpperCase() + move_mes);
 		done = true;
 		}
 	}
@@ -404,7 +447,7 @@ public class Board{
 					}
 				}
 			}
-		System.out.println("COLUMN [" + a +"] from " + player.getName().toUpperCase() + " has MOVED in the opossite direction\n");
+		System.out.println(col_mes + a + from_mes + player.getName().toUpperCase() + move_mes);
 		done = true;
 		}
 	}
@@ -417,14 +460,14 @@ public class Board{
 			int b = (int) ((Math.random()*Math.random() * table.length));
 			if (getFieldValue(a,b) != 0 && getFieldValue(a,b) != 2 ) {
 				table[a][b].setValue(getFieldValue(a,b)/2);;
-				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been DIVIDED\n");
+				System.out.println(field_mes + a + "][" + b + from_mes + player.getName().toUpperCase() + div_mes);
 				done = true;
 			}
 			if (getFieldValue(a,b) == 2){
 				table[a][b].setValue(0);
 				table[a][b].setBuff(null);
-				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been DIVIDED...\n"
-						+ "since the value was 2, it has been REMOVED\n");
+				System.out.println(field_mes + a + "][" + b + from_mes + player.getName().toUpperCase() + div_mes
+						+ div_fol);
 				done = true;
 			}
 		}
@@ -439,7 +482,7 @@ public class Board{
 			if (getFieldValue(a,b) != 0 && !(table[a][b] instanceof PBlockedField)) {
 				table[a][b].setValue(0);;
 				table[a][b].setBuff(null);
-				System.out.println("FIELD [" + a + "][" + b +"] from " + player.getName().toUpperCase() + " has been REMOVED\n");
+				System.out.println(field_mes + a + "][" + b + from_mes + player.getName().toUpperCase() + rem_mes);
 				done = true;
 			}
 		}
