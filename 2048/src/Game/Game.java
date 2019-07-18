@@ -19,18 +19,105 @@ public class Game
 	private Player player1;
 	private Player player2;
 	int turn = -1;
+	int language = 1;
+	String win_mes = " HAS WON THE GAME";
+	String inv_mes = "invalid input";
+	String help_en = "INSTRUCTIONS: \n"
+			+ "\nHow to Play:\n"
+			+ "\nTwo players, each with its board(4x4) must move the fields inside it. Each time a Player makes a move,\n"
+			+ "a new field spawns in his board.Should two fields of the same value clash, they'll sum up into a single\n"
+			+ "field of greater value. Only fields of same value can do this. The game is done once a player can't make\n"
+			+ "any more moves, meaning the other player won\n"
+			+ "\n"
+			+ "\t2\t-\t-\t-\n"
+			+ "\t2M\t-\t-\t-\n"
+			+ "\t-\tB(4)\t-\t-\n"
+			+ "\t64\t64\t-\t16\n"
+			+ "\n"
+			+ "2 - a field is represented by it's current value\n"
+			+ "2M - a letter next means that field contains a power up\n"
+			+ "B(4) - this is a blocked field: It can't be moved or summed no matter it's value:\n"
+			+"\nPowerups:\n"
+			+ "\nIf a field has a powerup it will show up as a letter next to the number. "
+			+ "If a player sums a field containing one, it will apply a debuff on the enemy player\n"
+			+ "R - remove a random field from the enemy player\n"
+			+ "B - block a random field from the enemy player, preventing it from being summed or moved\n"
+			+ "D - divide a random field from the enemy player, cutting it's value in half\n"
+			+ "M - should the enemy player move, a random file/row will move in the oposite direction\n"
+			+ "\nControls:\n"
+			+ "\nw - move up\n"
+			+ "s - move down\n"
+			+ "a - move left\n"
+			+ "d - move right\n"
+			+ "h - press h at any time to bring up this menu\n"
+			+ "q - change language\n"
+			+ "n - start a new game\n";
+	String help_es = "INSTRUCCIONES: \n"
+			+ "\nComo jugar:\n"
+			+ "\nDos jugadores, cada uno con su tablero(4x4), deben mover los campos. Cada vez que un jugador hace un movimiento,\n"
+			+ "un nuevo campo aparece en su tablero.Si dos campos colicionan, ambos seran convinados en un campo de mayor valor. \n"
+			+ "Solo campos del mismo valor pueden hacer eso. El juego termina una ves que un jugador no puede hacer mas \n"
+			+ "movimientos, significando su derrota\n"
+			+ "\n"
+			+ "\t2\t-\t-\t-\n"
+			+ "\t2M\t-\t-\t-\n"
+			+ "\t-\tB(4)\t-\t-\n"
+			+ "\t64\t64\t-\t16\n"
+			+ "\n"
+			+ "2 - un campo es representado por su valor\n"
+			+ "2M - una letra al lado de su valor significa que ese campo tiene un POWER UP\n"
+			+ "B(4) - este es un campo bloqueado, no puede ser movido ni sumado:\n"
+			+"\nPowerups:\n"
+			+ "\nSi un campo contiene una letra, significa que tiene un POWER UP. "
+			+ "Si el jugador suma uno conteniendo uno, le aplicara un efecto negativo al enemigo\n"
+			+ "R - remueve un campo del tablero\n"
+			+ "B - bloquea un campo del tablero, impdiendo ser sumado o movido\n"
+			+ "D - divide el valor de un campo por la mitad\n"
+			+ "M - cuando el jugador enemigo haga un movimiento, uno de sus campos se movera en direccion contraria\n"
+			+ "\nControles:\n"
+			+ "\nw - mover hacia arriba\n"
+			+ "s - mover hacia abajo\n"
+			+ "a - mover hacia la izquierda\n"
+			+ "d - mover hacia la derecha\n"
+			+ "h - presiona en cualquier momento para traer este menu\n"
+			+ "q - cambiar de idioma\n"
+			+ "n - nuevo juego\n";
 
 	public Game() 
 	{
-		player1 = new Player("player 1");
-		player1.setGame(this);
-		player2 = new Player("player 2");
-		player2.setGame(this);
-
+		player1 = new Player(this);
+		player1.setName(player1.getName() + " 1");
+		player2 = new Player(this);
+		player2.setName(player2.getName() + " 2");
+		menu();
 	}
+	
+	public void changeLanguage() {
+		language = language*-1;
+		if (language != 1) {
+			player1.setName("Jugador 1");
+			player1.getMoves().setLanguage();
+			player2.setName("Jugador 2");
+			player2.getMoves().setLanguage();
+			win_mes = " A GANADO EL JUEGO";
+			inv_mes = "invalid input";
+		}
+		else {
+			player1.setName("Player 1");
+			player1.getMoves().setLanguage();
+			player2.setName("Player 2");
+			player2.getMoves().setLanguage();
+			win_mes = " HAS WON THE GAME";
+			inv_mes = "comando invalido";
+		}
+	}
+	
 	public void gamePlay() 
 	{
-		
+		player1 = new Player(this);
+		player1.setName(player1.getName() + " 1");
+		player2 = new Player(this);
+		player2.setName(player2.getName() + " 2");
 		while (!player1.getMoves().gameLost() || !player2.getMoves().gameLost()) 
 		{
 				turn = turn*-1;
@@ -38,7 +125,8 @@ public class Game
 				else player2.movement();
 				
 			}
-		System.out.println("Perdiste");
+		if (player1.getMoves().gameLost()) System.out.println(player2.getName().toUpperCase() + win_mes);
+		else System.out.println(player1.getName().toUpperCase() + win_mes);
 		}
 
 	public void powerUpTrigger(PowerUp buff, Player player) 
@@ -55,39 +143,10 @@ public class Game
 		if (debuff instanceof PowerUpMove) player.setMoveAffected(true);
 	}
 
-	public void help() 
-	{
-		String help = "INSTRUCTIONS: \n"
-				+ "\nHow to Play:\n"
-				+ "\nTwo players, each with its board(4x4) must move the fields inside it. Each time a Player makes a move,\n"
-				+ "a new field spawns in his board.Should two fields of the same value clash, they'll sum up into a single\n"
-				+ "field of greater value. Only fields of same value can do this. The game is done once a player can't make\n"
-				+ "any more moves, meaning the other player won\n"
-				+ "\n"
-				+ "\t2\t-\t-\t-\n"
-				+ "\t2M\t-\t-\t-\n"
-				+ "\t-\tB(4)\t-\t-\n"
-				+ "\t64\t64\t-\t16\n"
-				+ "\n"
-				+ "2 - a field is represented by it's current value\n"
-				+ "2M - a letter next means that field contains a power up\n"
-				+ "B(4) - this is a blocked field: It can't be moved or summed no matter it's value:\n"
-				+"\nPowerups:\n"
-				+ "\nIf a field has a powerup it will show up as a letter next to the number. "
-				+ "If a player sums a field containing one, it will apply a debuff on the enemy player\n"
-				+ "R - remove a random field from the enemy player\n"
-				+ "B - block a random field from the enemy player, preventing it from being summed or moved\n"
-				+ "D - divide a random field from the enemy player, cutting it's value in half\n"
-				+ "M - should the enemy player move, a random file/row will move in the oposite direction\n"
-				+ "\nControls:\n"
-				+ "\nw - move up\n"
-				+ "s - move down\n"
-				+ "a - move left\n"
-				+ "d - move right\n"
-				+ "h - press h at any time to bring up this menu\n"
-				+ "n - start a new game\n";
-				
-		System.out.println(help);
+	public void help(int lan) 
+	{	
+		if (lan != 1) System.out.println(help_es);
+		else System.out.println(help_en);
 	}
 
 	public void menu()
@@ -103,9 +162,9 @@ public class Game
 				    + "//////////   ///////////////////  ////////  ////////////////  //////////  ////////  /////////\n"
 				    + "/////////               ////////            ////////////////  //////////            /////////\n"
 				    + "/////////////////////////////////////////////////////////////////////////////////////////////\n"
-				    + "                                                                                     ver 1.01";
+				    + "                                                                                     ver 1.10";
 		System.out.println(menu);
-		help();
+		help(language);;
 		boolean done = false;
 		boolean done2 = false;
 		while (!done) {
@@ -124,7 +183,14 @@ public class Game
 				done = true;
 				done2 = true;
 			}
-			if (!done2) System.out.println("invalid input");
+			
+			if (movement == 'q') {
+				changeLanguage();
+				menu();
+				done = true;
+				done2 = true;
+			}
+			if (!done2) System.out.println(inv_mes);
 		}
 	}
 	
