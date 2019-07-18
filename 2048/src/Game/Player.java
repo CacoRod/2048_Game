@@ -154,6 +154,7 @@ public class Player
 		moves.revertBlockedField();
 		setMoveAffected(false);
 		moves.fieldSpawner();
+		System.out.println("\t////////" + getName().toUpperCase() + "\\\\\\\\\\\\\\\\\\");
 		moves.consoleRender();
 		if (getGame().score_vis) scoreMes();
 		System.out.println(
