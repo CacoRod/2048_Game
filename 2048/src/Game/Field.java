@@ -84,6 +84,7 @@ public class Field
 				getGame().powerUpTrigger(other.getBuff(), getPlayer());
 				other.setBuff(null);
 			}
+			if (other.hasValue() && hasValue()) getPlayer().sumScore(value + other.value);
 			setValue(value += other.value);
 			setBuff(other.getBuff());
 			other.setValue(0);
@@ -99,7 +100,7 @@ public class Field
 	{
 		return (((value == other.value) || !other.hasValue()) && !(this instanceof PBlockedField)); 
 	}
-	
+
 	public boolean hasPowerUp()
 	{
 		return (this.getBuff() != null);

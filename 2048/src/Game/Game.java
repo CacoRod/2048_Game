@@ -20,8 +20,15 @@ public class Game
 	private Player player2;
 	int turn = -1;
 	int language = 1;
+	boolean score_vis;
 	String win_mes = " HAS WON THE GAME";
 	String inv_mes = "invalid input";
+	String goa_mes = "imput a value between 100 and 1000";
+	String goa_inv = "value must be between 100 and 1000";
+	String mode= "GAME MODES: \n"
+			+ "1 - first to reach a certain ammount of points points is the winner\n"
+			+ "2 - first to run out of moves is the looser";
+	
 	String help_en = "INSTRUCTIONS: \n"
 			+ "\nHow to Play:\n"
 			+ "\nTwo players, each with its board(4x4) must move the fields inside it. Each time a Player makes a move,\n"
@@ -100,7 +107,12 @@ public class Game
 			player2.setName("Jugador 2");
 			player2.getMoves().setLanguage();
 			win_mes = " A GANADO EL JUEGO";
-			inv_mes = "invalid input";
+			inv_mes = "comando invalido";
+			mode= "MODOS DE JUEGO: \n"
+					+ "1 - el primero en juntar cierta cantidad de puntos es el ganador\n"
+					+ "2 - el primero en quedarse sin movimientos es el perdedor";
+			goa_mes = "ingrese un valor entre 100 y 1000";
+			goa_inv = "el valor debe ser entre 100 y 1000";
 		}
 		else {
 			player1.setName("Player 1");
@@ -108,17 +120,23 @@ public class Game
 			player2.setName("Player 2");
 			player2.getMoves().setLanguage();
 			win_mes = " HAS WON THE GAME";
-			inv_mes = "comando invalido";
+			inv_mes = "invalid input";
+			mode= "GAME MODES: \n"
+					+ "1 - first to reach a certain ammount of points is the winner\n"
+					+ "2 - first to run out of moves is the looser";
+			goa_mes = "imput a value between 100 and 1000";
+			goa_inv = "value must be between 100 and 1000";
 		}
 	}
 	
-	public void gamePlay() 
+	public void gamePlay_a() 
 	{
+		score_vis = false;
 		player1 = new Player(this);
 		player1.setName(player1.getName() + " 1");
 		player2 = new Player(this);
 		player2.setName(player2.getName() + " 2");
-		while (!player1.getMoves().gameLost() || !player2.getMoves().gameLost()) 
+		while (!player1.getMoves().gameLost() && !player2.getMoves().gameLost()) 
 		{
 				turn = turn*-1;
 				if (turn == 1) player1.movement();
@@ -128,7 +146,25 @@ public class Game
 		if (player1.getMoves().gameLost()) System.out.println(player2.getName().toUpperCase() + win_mes);
 		else System.out.println(player1.getName().toUpperCase() + win_mes);
 		}
-
+	
+	public void gamePlay_b(int goal) 
+	{
+		score_vis = true;
+		player1 = new Player(this);
+		player1.setName(player1.getName() + " 1");
+		player2 = new Player(this);
+		player2.setName(player2.getName() + " 2");
+		while (player1.getScore()<goal && player2.getScore()<goal) 
+		{
+				turn = turn*-1;
+				if (turn == 1) player1.movement();
+				else player2.movement();
+				
+			}
+		if (player1.getMoves().gameLost()) System.out.println(player2.getName().toUpperCase() + win_mes);
+		else System.out.println(player1.getName().toUpperCase() + win_mes);
+	}
+	
 	public void powerUpTrigger(PowerUp buff, Player player) 
 	{
 		if (player != player1) applyDebuff(player1,buff);
@@ -162,7 +198,7 @@ public class Game
 				    + "//////////   ///////////////////  ////////  ////////////////  //////////  ////////  /////////\n"
 				    + "/////////               ////////            ////////////////  //////////            /////////\n"
 				    + "/////////////////////////////////////////////////////////////////////////////////////////////\n"
-				    + "                                                                                     ver 1.10";
+				    + "                                                                                     ver 1.15";
 		System.out.println(menu);
 		help(language);;
 		boolean done = false;
@@ -179,7 +215,7 @@ public class Game
 				done2 = true;
 			}
 			if (movement == 'n') {
-				gamePlay();
+				gameMode();
 				done = true;
 				done2 = true;
 			}
@@ -194,6 +230,65 @@ public class Game
 		}
 	}
 	
+	public void gameMode()
+	{
+		System.out.println(mode);
+		boolean done = false;
+		boolean done2 = false;
+		while (!done) {
+			Scanner scanner = new Scanner(System.in);
+			String scan = scanner.nextLine().toLowerCase();
+			if (scan.isEmpty()) scan = "fff";
+			char movement = scan.charAt(0);
+			
+			if (movement == '1') {
+				setGoal();
+				done = true;
+				done2 = true;
+			}
+			if (movement == '2') {
+				gamePlay_a();
+				done = true;
+				done2 = true;
+			}
+			if (movement == 'q') {
+				changeLanguage();
+				gameMode();
+				done = true;
+				done2 = true;
+			}
+			if (!done2) System.out.println(inv_mes);
+		}
+	}
+	
+	public void setGoal()
+	{
+		System.out.println(goa_mes);
+		boolean done = false;
+		boolean done2 = false;
+		while (!done) {
+			Scanner scanner = new Scanner(System.in);
+			String scan = scanner.nextLine().toLowerCase();
+			char movement = scan.charAt(0);
+			int goal = Integer.parseInt(scan);
+			if (scan.isEmpty()) scan = "250";
+			
+			if (movement == 'q') {
+				changeLanguage();
+				setGoal();
+				done = true;
+				done2 = true;
+			}
+			
+			if (goal >= 100 && goal <=1000) {
+				gamePlay_b(goal);
+				done = true;
+				done2 = true;
+			}
+
+			if (!done2) System.out.println(goa_inv);
+		}
+	}
 	
 	public JsonObject stringToJson() {
 		

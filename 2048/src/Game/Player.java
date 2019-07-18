@@ -13,12 +13,21 @@ public class Player
 	private String name;
 	private Game game;
 	private boolean moveAffected;
+	private int score;
 	
 	public void languageMes() {
 		if (getGame().language != 1) System.out.println("lenguage cambiado a ESPAÑOL");
 		else System.out.println("language set to ENGLISH");
 	}
-	                          
+	
+	public void scoreMes() {
+		String mes;
+		if (getGame().language != 1) mes = "\tPUNTAJE:";
+		else mes = "\tSCORE:";
+		
+		System.out.println(mes + score);
+	}
+	
 	public void invalidMes() {
 		if (getGame().language != 1) System.out.println("comando invalido");
 		else System.out.println("invalid input");
@@ -63,6 +72,7 @@ public class Player
 	
 	public Player(Game game) 
 	{ 
+		setScore(0);
 		if (game.language != 1) setName("Jugador");
 		else setName("Player");
 		setGame(game);
@@ -80,6 +90,7 @@ public class Player
 	{
 		System.out.println("\t////////" + getName().toUpperCase() + "\\\\\\\\\\\\\\\\\\");
 		moves.consoleRender();
+		if (getGame().score_vis) scoreMes();
 		boolean done = false;
 		boolean done2 = false;
 		
@@ -144,6 +155,7 @@ public class Player
 		setMoveAffected(false);
 		moves.fieldSpawner();
 		moves.consoleRender();
+		if (getGame().score_vis) scoreMes();
 		System.out.println(
 				  "===============================================\n"
 				+ "===============================================\n"
@@ -167,5 +179,16 @@ public class Player
 		return obj;
 	}
 
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
+	public void sumScore(int value) {
+		score += value;
+	}
 
 }
