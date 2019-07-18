@@ -98,9 +98,14 @@ public class Field
 	
 	public boolean checkSum(Field other) 
 	{
-		return (((value == other.value) || !other.hasValue()) && !(this instanceof PBlockedField)); 
+		return ((value == other.value) && other.hasValue() && !(this instanceof PBlockedField)); 
 	}
-
+	
+	public boolean checkSum_b(Field other) 
+	{
+		return (((value == other.value) || !other.hasValue()) && !(this instanceof PBlockedField) && !(other instanceof PBlockedField)); 
+	}
+	
 	public boolean hasPowerUp()
 	{
 		return (this.getBuff() != null);
