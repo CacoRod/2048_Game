@@ -121,7 +121,7 @@ public class Board{
 		for (int fila=0; fila<=table.length - 1; fila++) {
 			for (int contador=1; contador<=4; contador ++ ) {
 				for (int columna=table[fila].length-1; columna>0;columna--) {
-					if (!table[fila][columna-1].hasValue()) {
+					if (!table[fila][columna-1].hasValue() || table[fila][columna].checkSum(table[fila][columna-1])) {
 						table[fila][columna-1].sum(table[fila][columna]);
 					}
 				}
@@ -152,7 +152,7 @@ public class Board{
 		for (int fila=0; fila<=table.length-1; fila++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
 				for (int columna=0; columna<table.length-1;columna++) {
-					if (!table[fila][columna+1].hasValue()) {
+					if (!table[fila][columna+1].hasValue() || table[fila][columna].checkSum(table[fila][columna+1])) {
 						table[fila][columna+1].sum(table[fila][columna]);
 					}
 				}
@@ -183,7 +183,7 @@ public class Board{
 		for (int columna=0; columna<=table.length -1; columna++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
 				for (int fila=0; fila<table.length - 1;fila++) {
-					if (!table[fila+1][columna].hasValue()) {
+					if (!table[fila+1][columna].hasValue()|| table[fila][columna].checkSum(table[fila+1][columna])) {
 						table[fila+1][columna].sum(table[fila][columna]);	
 					}
 				}
@@ -214,9 +214,8 @@ public class Board{
 		for (int columna=0; columna<=table.length-1; columna++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
 				for (int fila=3; fila>table.length-table.length;fila--) {
-					if (!table[fila-1][columna].hasValue()) {
+					if (!table[fila-1][columna].hasValue() || table[fila][columna].checkSum(table[fila-1][columna])) {
 						table[fila-1][columna].sum(table[fila][columna]);
-						table[fila][columna].setValue(0);	
 					}
 				}
 			}
