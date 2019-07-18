@@ -161,7 +161,7 @@ public class Game
 		player1.setName(player1.getName() + " 1");
 		player2 = new Player(this);
 		player2.setName(player2.getName() + " 2");
-		while (player1.getScore()<=goal && player2.getScore()<=goal) 
+		while (player1.getScore()<goal && player2.getScore()<goal) 
 		{
 				turn = turn*-1;
 				if (turn == 1) player1.movement();
@@ -173,7 +173,7 @@ public class Game
 		else lastBreath(player1);
 		player1.scoreMes();
 		player2.scoreMes();
-		if (player1.getScore()>=goal) System.out.println(player1.getName().toUpperCase() + win_mes);
+		if (player1.getScore()>=player2.getScore()) System.out.println(player1.getName().toUpperCase() + win_mes);
 		else System.out.println(player2.getName().toUpperCase() + win_mes);
 	}
 	
@@ -212,7 +212,7 @@ public class Game
 				    + "//////////   ///////////////////  ////////  ////////////////  //////////  ////////  /////////\n"
 				    + "/////////               ////////            ////////////////  //////////            /////////\n"
 				    + "/////////////////////////////////////////////////////////////////////////////////////////////\n"
-				    + "                                                                                     ver 1.17";
+				    + "                                                                                     ver 1.18";
 		System.out.println(menu);
 		help(language);;
 		boolean done = false;

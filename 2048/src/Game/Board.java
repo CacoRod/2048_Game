@@ -333,7 +333,7 @@ public class Board{
 	
 	public boolean canMoveDown()
 	{
-		for (int fila=0; fila<=table.length - 1; fila++) {
+		for (int fila=0; fila<=table.length - 2; fila++) {
 			for (int columna=0; columna<=table[fila].length - 1;columna++) {
 				if (table[fila][columna].hasValue() && table[fila][columna].checkSum_b(table[fila+1][columna])) return true; 
 			}
