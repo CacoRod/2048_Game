@@ -76,11 +76,11 @@ public class Field
 	public void sum(Field other)
 	{
 		if (!(this instanceof PBlockedField) && !(other instanceof PBlockedField)) {
-			if (hasPowerUp() && other.value != 0) {
+			if (hasPowerUp() && other.hasValue()) {
 				getGame().powerUpTrigger(getBuff(), getPlayer());
 				setBuff(null);
 			}
-			if (other.hasPowerUp() && value != 0) { 
+			if (other.hasPowerUp() && hasValue()) { 
 				getGame().powerUpTrigger(other.getBuff(), getPlayer());
 				other.setBuff(null);
 			}
@@ -91,10 +91,13 @@ public class Field
 		}
 	}
 	
+	public boolean hasValue() {
+		return (value != 0);
+	}
 	
 	public boolean checkSum(Field other) 
 	{
-		return (value == other.value && !(this instanceof PBlockedField)); 
+		return (((value == other.value) || !other.hasValue()) && !(this instanceof PBlockedField)); 
 	}
 	
 	public boolean hasPowerUp()
