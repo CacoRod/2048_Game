@@ -25,6 +25,7 @@ public class Game
 	String inv_mes = "invalid input";
 	String goa_mes = "imput a value between 100 and 1000";
 	String goa_inv = "value must be between 100 and 1000";
+	String tie_mes = "TIE";
 	String mode= "GAME MODES: \n"
 			+ "1 - first to reach a certain ammount of points points is the winner\n"
 			+ "2 - first to run out of moves is the looser";
@@ -113,6 +114,7 @@ public class Game
 					+ "2 - el primero en quedarse sin movimientos es el perdedor";
 			goa_mes = "ingrese un valor entre 100 y 1000";
 			goa_inv = "el valor debe ser entre 100 y 1000";
+			tie_mes = "EMPATE";
 		}
 		else {
 			player1.setName("Player 1");
@@ -126,6 +128,7 @@ public class Game
 					+ "2 - first to run out of moves is the looser";
 			goa_mes = "imput a value between 100 and 1000";
 			goa_inv = "value must be between 100 and 1000";
+			tie_mes = "TIE";
 		}
 	}
 	
@@ -154,16 +157,24 @@ public class Game
 		player1.setName(player1.getName() + " 1");
 		player2 = new Player(this);
 		player2.setName(player2.getName() + " 2");
-		while (player1.getScore()<goal && player2.getScore()<goal) 
+		while (player1.getScore()<=goal && player2.getScore()<=goal) 
 		{
 				turn = turn*-1;
 				if (turn == 1) player1.movement();
 				else player2.movement();
 				
 			}
-		if (player1.getMoves().gameLost()) System.out.println(player2.getName().toUpperCase() + win_mes);
-		else System.out.println(player1.getName().toUpperCase() + win_mes);
+		if (turn == -1) player2.movement();
+		if (player1.getScore()>=goal && player2.getScore()>=goal ) {
+			System.out.println(tie_mes);
+		}
+		else {
+		if (player1.getScore()>=goal) System.out.println(player1.getName().toUpperCase() + win_mes);
+		else System.out.println(player2.getName().toUpperCase() + win_mes);
+		}
 	}
+	
+	
 	
 	public void powerUpTrigger(PowerUp buff, Player player) 
 	{
@@ -198,7 +209,7 @@ public class Game
 				    + "//////////   ///////////////////  ////////  ////////////////  //////////  ////////  /////////\n"
 				    + "/////////               ////////            ////////////////  //////////            /////////\n"
 				    + "/////////////////////////////////////////////////////////////////////////////////////////////\n"
-				    + "                                                                                     ver 1.15";
+				    + "                                                                                     ver 1.16";
 		System.out.println(menu);
 		help(language);;
 		boolean done = false;
