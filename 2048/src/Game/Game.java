@@ -15,10 +15,11 @@ import com.github.cliftonlabs.json_simple.Jsoner;
 //tiene dos jugador. Tiene que poder iniciar una nueva partida, restartearla, cargar y guardar
 public class Game
 {
-
+	
 	private Player player1;
 	private Player player2;
-	int turn = -1;
+	private boolean forfeit;
+	int turn;
 	int language = 1;
 	boolean score_vis;
 	String win_mes = " HAS WON THE GAME";
@@ -28,15 +29,14 @@ public class Game
 	String tie_mes = "TIE";
 	String lb_mes = "LAST BREATH!";
 	String mode= "GAME MODES: \n"
-			+ "1 - first to reach a certain ammount of points points is the winner\n"
+			+ "1 - highest score is the winner\n"
 			+ "2 - first to run out of moves is the looser";
 	
 	String help_en = "INSTRUCTIONS: \n"
 			+ "\nHow to Play:\n"
 			+ "\nTwo players, each with its board(4x4) must move the fields inside it. Each time a Player makes a move,\n"
 			+ "a new field spawns in his board.Should two fields of the same value clash, they'll sum up into a single\n"
-			+ "field of greater value. Only fields of same value can do this. The game is done once a player can't make\n"
-			+ "any more moves, meaning the other player won\n"
+			+ "field of greater value. Only fields of same value can do this.\n"
 			+ "\n"
 			+ "\t2\t-\t-\t-\n"
 			+ "\t2M\t-\t-\t-\n"
@@ -53,6 +53,11 @@ public class Game
 			+ "B - block a random field from the enemy player, preventing it from being summed or moved\n"
 			+ "D - divide a random field from the enemy player, cutting it's value in half\n"
 			+ "M - should the enemy player move, a random file/row will move in the oposite direction\n"
+			+"\nGame Modes:\n"
+			+ "Move game: the game ends when one of the players can't make any more moves. Meaning the other player won\n"
+			+ "Score game: the player with the highest score wins. After passing a certain score (determined by the\n"
+			+ "players beforehand) you won't be allowed to make any more moves. The other player then enters LAST\n"
+			+ "BREATH, where he has three moves to try and beat your score\n"	
 			+ "\nControls:\n"
 			+ "\nw - move up\n"
 			+ "s - move down\n"
@@ -65,8 +70,7 @@ public class Game
 			+ "\nComo jugar:\n"
 			+ "\nDos jugadores, cada uno con su tablero(4x4), deben mover los campos. Cada vez que un jugador hace un movimiento,\n"
 			+ "un nuevo campo aparece en su tablero.Si dos campos colicionan, ambos seran combinados en un campo de mayor valor. \n"
-			+ "Solo campos del mismo valor pueden hacer eso. El juego termina una ves que un jugador no puede hacer mas \n"
-			+ "movimientos, significando su derrota\n"
+			+ "Solo campos del mismo valor pueden hacer eso.\n"
 			+ "\n"
 			+ "\t2\t-\t-\t-\n"
 			+ "\t2M\t-\t-\t-\n"
@@ -83,6 +87,11 @@ public class Game
 			+ "B - bloquea un campo del tablero, impdiendo ser sumado o movido\n"
 			+ "D - divide el valor de un campo por la mitad\n"
 			+ "M - cuando el jugador enemigo haga un movimiento, uno de sus campos se movera en direccion contraria\n"
+			+"\nGame Modes:\n"
+			+ "Movimiento: el juego termina cuando un jugador no puede hacer mas movimientos. Significando que el otro gano\n"
+			+ "Puntaje: el jugador con el mayor puntaje gana. Al sobrepasar cierto puntaje (determinado por los jugadores\n"
+			+ "antes de empezar) no podras hacer mas movimientos. El otro jugador entonces entra en ULTIMO ALIENTO,\n"
+			+ "donde tiene solo tres movimientos para intentar vencer tu puntaje\n"
 			+ "\nControles:\n"
 			+ "\nw - mover hacia arriba\n"
 			+ "s - mover hacia abajo\n"
@@ -111,7 +120,7 @@ public class Game
 			win_mes = " A GANADO EL JUEGO";
 			inv_mes = "comando invalido";
 			mode= "MODOS DE JUEGO: \n"
-					+ "1 - el primero en juntar cierta cantidad de puntos es el ganador\n"
+					+ "1 - el puntaje mas alto es el ganador\n"
 					+ "2 - el primero en quedarse sin movimientos es el perdedor";
 			goa_mes = "ingrese un valor entre 100 y 1000";
 			goa_inv = "el valor debe ser entre 100 y 1000";
@@ -126,7 +135,7 @@ public class Game
 			win_mes = " HAS WON THE GAME";
 			inv_mes = "invalid input";
 			mode= "GAME MODES: \n"
-					+ "1 - first to reach a certain ammount of points is the winner\n"
+					+ "1 - highest score is the winner\n"
 					+ "2 - first to run out of moves is the looser";
 			goa_mes = "imput a value between 100 and 1000";
 			goa_inv = "value must be between 100 and 1000";
@@ -142,16 +151,19 @@ public class Game
 		player1.setName(player1.getName() + " 1");
 		player2 = new Player(this);
 		player2.setName(player2.getName() + " 2");
-		while (!player1.getMoves().gameLost() && !player2.getMoves().gameLost()) 
+		while ((!player1.getMoves().gameLost() && !player2.getMoves().gameLost()) && !isForfeit()) 
 		{
 				turn = turn*-1;
 				if (turn == 1) player1.movement();
 				else player2.movement();
 				
 			}
-		if (player1.getMoves().gameLost()) System.out.println(player2.getName().toUpperCase() + win_mes);
-		else System.out.println(player1.getName().toUpperCase() + win_mes);
+		if (!isForfeit()) {
+			if (player1.getMoves().gameLost()) System.out.println(player2.getName().toUpperCase() + win_mes);
+			else System.out.println(player1.getName().toUpperCase() + win_mes);
 		}
+		else gameMode();
+	}
 	
 	public void gamePlay_b(int goal) 
 	{
@@ -161,20 +173,26 @@ public class Game
 		player1.setName(player1.getName() + " 1");
 		player2 = new Player(this);
 		player2.setName(player2.getName() + " 2");
-		while (player1.getScore()<goal && player2.getScore()<goal) 
+		while ((player1.getScore()<goal && player2.getScore()<goal) && !isForfeit()) 
 		{
 				turn = turn*-1;
 				if (turn == 1) player1.movement();
 				else player2.movement();
 				
 			}
-		System.out.println(lb_mes);
-		if (player1.getScore()>= goal) lastBreath(player2);
-		else lastBreath(player1);
-		player1.scoreMes();
-		player2.scoreMes();
-		if (player1.getScore()>=player2.getScore()) System.out.println(player1.getName().toUpperCase() + win_mes);
-		else System.out.println(player2.getName().toUpperCase() + win_mes);
+		if (!isForfeit()) {
+			System.out.println(lb_mes);
+			if (player1.getScore()>= goal) lastBreath(player2);
+			else lastBreath(player1);
+			player1.scoreMes();
+			player2.scoreMes();
+			if (player1.getScore() == player2.getScore()) System.out.println(tie_mes);
+			else {
+				if (player1.getScore()>=player2.getScore()) System.out.println(player1.getName().toUpperCase() + win_mes);
+				else System.out.println(player2.getName().toUpperCase() + win_mes);
+			}
+		}
+		else gameMode();
 	}
 	
 	
@@ -213,6 +231,8 @@ public class Game
 				    + "/////////               ////////            ////////////////  //////////            /////////\n"
 				    + "/////////////////////////////////////////////////////////////////////////////////////////////\n"
 				    + "                                                                                     ver 1.18";
+		
+		
 		System.out.println(menu);
 		help(language);;
 		boolean done = false;
@@ -246,6 +266,8 @@ public class Game
 	
 	public void gameMode()
 	{
+		setForfeit(false);
+		turn = -1;
 		System.out.println(mode);
 		boolean done = false;
 		boolean done2 = false;
@@ -383,6 +405,14 @@ public class Game
 			player.movement();
 		}
 		
+	}
+
+	public boolean isForfeit() {
+		return forfeit;
+	}
+
+	public void setForfeit(boolean forfeit) {
+		this.forfeit = forfeit;
 	}
 	
 	

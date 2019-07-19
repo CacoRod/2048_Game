@@ -147,6 +147,11 @@ public class Player
 				done2 = true;
 				}
 			
+			if (movement == 'n'){
+				done = true;
+				done2 = true;
+				getGame().setForfeit(true);
+				}
 			
 			if (!done2) invalidMes();
 
@@ -191,5 +196,6 @@ public class Player
 	public void sumScore(int value) {
 		score += value;
 	}
+
 
 }
