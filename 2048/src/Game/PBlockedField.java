@@ -6,6 +6,10 @@ public class PBlockedField extends Field{
 		super(value,null, buff);
 
 	}
-
+	
+	
+	public void sum(Field other) {
+		
+	}
 
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import Game.Board;
 import Game.Field;
+import Game.Player;
 
 class BoardTest {
 	
@@ -20,7 +21,7 @@ class BoardTest {
 				{new Field(4,board),new Field(0,board),new Field(4,board),new Field(0,board)},
 				{new Field(0,board),new Field(0,board),new Field(8,board),new Field(8,board)}
 			};
-		board = new Board();
+		board = new Board(player);
 		board.setTable(table);
 	}
 
@@ -278,4 +279,5 @@ class BoardTest {
 	}
 	
 	Board board;
+	Player player;
 }

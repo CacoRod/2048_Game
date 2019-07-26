@@ -98,128 +98,53 @@ public class Board{
 		}
 
 	}
-	
-	public void sumLeft() 
-	{
-		for (int fila=0; fila<=table.length - 1; fila++) {
-			for (int columna=0; columna<=table[fila].length - 2;columna++) {
-				for (int siguiente=columna+1;siguiente<=table.length-1;siguiente++) {
-					if (!table[fila][siguiente].checkSum(table[fila][columna]) && table[fila][siguiente].hasValue()) break;
-					if (table[fila][siguiente].checkSum(table[fila][columna])) {
-						table[fila][columna].sum(table[fila][siguiente]);
-						break;
-					}
-				}
-			}
-		}
-	}
-	
 
 	public void moveLeft() 
 	{
-		sumLeft();
 		for (int fila=0; fila<=table.length - 1; fila++) {
 			for (int contador=1; contador<=4; contador ++ ) {
-				for (int columna=table[fila].length-1; columna>0;columna--) {
-					if (!table[fila][columna-1].hasValue()) {
-						table[fila][columna-1].sum(table[fila][columna]);
+				for (int columna=0; columna<table.length - 1;columna++) {
+						table[fila][columna].sum(table[fila][columna+1]);
 					}
 				}
 			}
-		}
+		resetSum();
 	}
-	
-	
-	public void sumRight() 
-	{
-		for (int fila=0; fila<=table.length-1; fila++) {
-			for (int columna=3; columna>table.length-table.length;columna--) {
-				for (int siguiente=columna-1;siguiente>=table.length-table.length;siguiente--) {
-					if (!table[fila][siguiente].checkSum(table[fila][columna]) && table[fila][siguiente].hasValue()) break;
-					if (table[fila][siguiente].checkSum(table[fila][columna])) {
-						table[fila][columna].sum(table[fila][siguiente]);
-						break;
-					}
-				}
-			}
-		}
-	}
-
 
 	public void moveRight() 
 	{
-		sumRight();
 		for (int fila=0; fila<=table.length-1; fila++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
-				for (int columna=0; columna<table.length-1;columna++) {
-					if (!table[fila][columna+1].hasValue()) {
-						table[fila][columna+1].sum(table[fila][columna]);
+				for (int columna=3; columna>table.length-table.length;columna--) {
+						table[fila][columna].sum(table[fila][columna-1]);
 					}
 				}
 			}
-		}
+		resetSum();
 	}
-	
-	
-	public void sumDown() 
-	{
-		for (int columna=0; columna<=table.length -1; columna++) {
-			for (int fila=3; fila>table.length - table.length;fila--) {
-				for (int siguiente=fila-1;siguiente>=table.length-table.length;siguiente--) {
-					if (!table[siguiente][columna].checkSum(table[fila][columna]) && table[siguiente][columna].hasValue()) break;
-					if (table[siguiente][columna].checkSum(table[fila][columna])) {
-						table[fila][columna].sum(table[siguiente][columna]);
-						break;
-					}
-				}
-			}
-		}
-	}
-	
-	
+
 	public void moveDown() 
 	{
-		sumDown();
 		for (int columna=0; columna<=table.length -1; columna++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
-				for (int fila=0; fila<table.length - 1;fila++) {
-					if (!table[fila+1][columna].hasValue()) {
-						table[fila+1][columna].sum(table[fila][columna]);	
-					}
+				for (int fila=3; fila>table.length-table.length;fila--) {
+						table[fila][columna].sum(table[fila-1][columna]);	
 				}
 			}
 		}
+		resetSum();
 	}
-	
-	
-	public void sumUp() 
-	{
-		for (int columna=0; columna<=table.length-1; columna++) {
-			for (int fila=0; fila<=table.length-2;fila++) {
-				for (int siguiente=fila+1;siguiente<=table.length-1;siguiente++) {
-					if (!table[siguiente][columna].checkSum(table[fila][columna]) && table[siguiente][columna].hasValue()) break;
-					if (table[siguiente][columna].checkSum(table[fila][columna])) {
-						table[fila][columna].sum(table[siguiente][columna]);
-						break;
-					}
-				}
-			}
-		}
-	}
-	
 	
 	public void moveUp() 
 	{
-		sumUp();
 		for (int columna=0; columna<=table.length-1; columna++) {
 			for (int contador=1; contador<=table.length; contador++ ) {
-				for (int fila=3; fila>table.length-table.length;fila--) {
-					if (!table[fila-1][columna].hasValue()) {
-						table[fila-1][columna].sum(table[fila][columna]);
-					}
+				for (int fila=0; fila<table.length-1;fila++) {
+						table[fila][columna].sum(table[fila+1][columna]);
 				}
 			}
 		}
+	resetSum();
 	}
 	
 	public void consoleRender() {
@@ -517,6 +442,13 @@ public class Board{
 		
 	}
 	
+	public void resetSum() {
+		for (int fila = 0; fila<=table.length-1; fila++) {
+			for (int columna = 0; columna<=table.length-1; columna++) {
+				table[fila][columna].setSum(true);
+				}
+			}	
+	}
 
 
 }

@@ -10,7 +10,7 @@ public class Field
 	private int value;
 	private PowerUp buff;
 	private Board board;
-	
+	private boolean sum;
 	
 	
 	private Player getPlayer() 
@@ -57,6 +57,7 @@ public class Field
 		setValue(value);
 		setBuff(buff);
 		setBoard(board);
+		setSum(true);
 		
 	}
 	
@@ -64,18 +65,21 @@ public class Field
 	{
 		setValue(value);
 		setBoard(board);
+		setSum(true);
 		
 	}
 	
 	public Field(Object value) {
 		setValue((int)((BigDecimal)value).longValue());
 		setBoard(board);
+		setSum(true);
 	}
 	
 	
 	public void sum(Field other)
 	{
-		if (!(this instanceof PBlockedField) && !(other instanceof PBlockedField)) {
+		if (!(other instanceof PBlockedField) && (((this.canSum() && other.canSum()) && (value == other.value)) || (!other.hasValue() || !hasValue()))) {
+			
 			if (hasPowerUp() && other.hasValue()) {
 				getGame().powerUpTrigger(getBuff(), getPlayer());
 				setBuff(null);
@@ -84,11 +88,14 @@ public class Field
 				getGame().powerUpTrigger(other.getBuff(), getPlayer());
 				other.setBuff(null);
 			}
-			if (other.hasValue() && hasValue()) getPlayer().sumScore(value + other.value);
+			if (other.hasValue() && hasValue()) {
+				setSum(false);
+				getPlayer().sumScore(value + other.value);
+			}
+			if (!hasValue()) setBuff(other.getBuff());
 			setValue(value += other.value);
-			setBuff(other.getBuff());
-			other.setValue(0);
 			other.setBuff(null);
+			other.setValue(0);
 		}
 	}
 	
@@ -128,6 +135,12 @@ public class Field
 		obj.get("buff");
 		
 		return obj;
+	}
+	public boolean canSum() {
+		return sum;
+	}
+	public void setSum(boolean sum) {
+		this.sum = sum;
 	}
 
 }
