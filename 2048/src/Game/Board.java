@@ -1,7 +1,5 @@
 package Game;
 
-import com.github.cliftonlabs.json_simple.JsonArray;
-import com.github.cliftonlabs.json_simple.JsonObject;
 
 
 public class Board{
@@ -38,12 +36,6 @@ public class Board{
 		fieldSpawnerFirstRound();
 		fieldSpawnerFirstRound();
 	}
-	
-	public Board(JsonArray jsonArray) 
-	{
-		loadBoard(jsonArray);
-	}
-
 
 	public Field[][] getTable() 
 	{
@@ -288,7 +280,7 @@ public class Board{
 		while (done == false) {
 			int a = (int) ((Math.random()*Math.random() * table.length));
 			int b = (int) ((Math.random()*Math.random() * table.length));
-			if (getFieldValue(a,b) != 0) {
+			if (table[a][b].hasValue() && !(table[a][b] instanceof PBlockedField)) {
 				table[a][b] = new PBlockedField(getFieldValue(a, b), table[a][b].getBuff());
 				System.out.println(field_mes + a + "][" + b + from_mes + player.getName().toUpperCase() + bl_mes);
 				done = true;
@@ -412,35 +404,6 @@ public class Board{
 		}
   }
 	
-	com.github.cliftonlabs.json_simple.JsonObject obj = new com.github.cliftonlabs.json_simple.JsonObject();
-	
-	public JsonArray saveBoard() {
-		
-		JsonArray jsonBoard = new JsonArray();
-		for (int i = 0; i < table.length; i++) {
-			JsonArray jsonArray = new JsonArray();
-			for (int j = 0; j < table.length; j++) {
-				obj.put("field", getFieldValue(i, j));
-				jsonArray.add(obj);
-			}
-			jsonBoard.add(jsonArray);
-		}
-
-		
-		return jsonBoard;
-	}
-	
-	public void loadBoard(JsonArray array) {
-		for (int i = 0; i < array.size(); i++) {
-			Object[] fields = array.getCollection(i).toArray();			
-			for (int j = 0; j < fields.length; j++) {
-				
-				this.table[i][j] = new Field(((JsonObject) fields[j]).get("field"));
-				this.table[i][j].setBoard(this);
-			}
-		}
-		
-	}
 	
 	public void resetSum() {
 		for (int fila = 0; fila<=table.length-1; fila++) {
@@ -449,6 +412,7 @@ public class Board{
 				}
 			}	
 	}
+
 
 
 }

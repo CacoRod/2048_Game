@@ -1,8 +1,6 @@
 package Game;
 
-import java.math.BigDecimal;
 
-import com.github.cliftonlabs.json_simple.JsonObject;
 
 public class Field
 {
@@ -69,13 +67,33 @@ public class Field
 		
 	}
 	
-	public Field(Object value) {
-		setValue((int)((BigDecimal)value).longValue());
+	public Field (int value, Board board,String buff) 
+	{
+		setValue(value);
 		setBoard(board);
-		setSum(true);
+		
+		switch (buff) {
+		
+		  case "null":
+			  	setBuff(null);
+			    break;
+		  case "R":
+			  	setBuff(new PowerUpRemove());
+			    break;
+		  case "D":
+			  setBuff(new PowerUpDivide());
+			  	break;
+		  case "M":
+			  setBuff(new PowerUpMove());
+			  	break;
+		  case "B":
+			  setBuff(new PowerUpBlock());
+			  break;
+	
+		}
 	}
-	
-	
+
+
 	public void sum(Field other)
 	{
 		if (!(other instanceof PBlockedField) && (((this.canSum() && other.canSum()) && (value == other.value)) || (!other.hasValue() || !hasValue()))) {
@@ -92,12 +110,19 @@ public class Field
 				setSum(false);
 				getPlayer().sumScore(value + other.value);
 			}
-			if (!hasValue()) setBuff(other.getBuff());
-			setValue(value += other.value);
-			other.setBuff(null);
-			other.setValue(0);
+			doSum(other);
 		}
 	}
+	
+	public void doSum(Field other) 
+	{
+		if (!hasValue()) setBuff(other.getBuff());
+		setValue(value += other.value);
+		other.setBuff(null);
+		other.setValue(0);
+	}
+	
+	
 	
 	public boolean hasValue() {
 		return (value != 0);
@@ -118,29 +143,19 @@ public class Field
 		return (this.getBuff() != null);
 	}
 	
-	
-	com.github.cliftonlabs.json_simple.JsonObject obj = new com.github.cliftonlabs.json_simple.JsonObject();
-	
-	public JsonObject saveField() {
-			
-		obj.put("value", getValue());
-			
-		
-		return obj;
-	}
-	
-	public JsonObject loadField() {
-		
-		obj.get("value");
-		obj.get("buff");
-		
-		return obj;
-	}
 	public boolean canSum() {
 		return sum;
 	}
 	public void setSum(boolean sum) {
 		this.sum = sum;
 	}
-
+	
+	public String toString() {
+		String buff = "null";
+		String data = String.valueOf(value);
+		if (getBuff() != null) buff = getBuff().render();
+		
+		return data + " " + buff;
+		
+	}
 }
