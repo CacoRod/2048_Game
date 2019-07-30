@@ -1,8 +1,6 @@
 package Game;
 
-import java.math.BigDecimal;
 
-import com.github.cliftonlabs.json_simple.JsonObject;
 
 public class Field
 {
@@ -10,7 +8,7 @@ public class Field
 	private int value;
 	private PowerUp buff;
 	private Board board;
-	
+	private boolean sum;
 	
 	
 	private Player getPlayer() 
@@ -57,6 +55,7 @@ public class Field
 		setValue(value);
 		setBuff(buff);
 		setBoard(board);
+		setSum(true);
 		
 	}
 	
@@ -64,18 +63,41 @@ public class Field
 	{
 		setValue(value);
 		setBoard(board);
+		setSum(true);
 		
 	}
 	
-	public Field(Object value) {
-		setValue((int)((BigDecimal)value).longValue());
+	public Field (int value, Board board,String buff) 
+	{
+		setValue(value);
 		setBoard(board);
+		
+		switch (buff) {
+		
+		  case "null":
+			  	setBuff(null);
+			    break;
+		  case "R":
+			  	setBuff(new PowerUpRemove());
+			    break;
+		  case "D":
+			  setBuff(new PowerUpDivide());
+			  	break;
+		  case "M":
+			  setBuff(new PowerUpMove());
+			  	break;
+		  case "B":
+			  setBuff(new PowerUpBlock());
+			  break;
+	
+		}
 	}
-	
-	
+
+
 	public void sum(Field other)
 	{
-		if (!(this instanceof PBlockedField) && !(other instanceof PBlockedField)) {
+		if (!(other instanceof PBlockedField) && (((this.canSum() && other.canSum()) && (value == other.value)) || (!other.hasValue() || !hasValue()))) {
+			
 			if (hasPowerUp() && other.hasValue()) {
 				getGame().powerUpTrigger(getBuff(), getPlayer());
 				setBuff(null);
@@ -84,13 +106,23 @@ public class Field
 				getGame().powerUpTrigger(other.getBuff(), getPlayer());
 				other.setBuff(null);
 			}
-			if (other.hasValue() && hasValue()) getPlayer().sumScore(value + other.value);
-			setValue(value += other.value);
-			setBuff(other.getBuff());
-			other.setValue(0);
-			other.setBuff(null);
+			if (other.hasValue() && hasValue()) {
+				setSum(false);
+				getPlayer().sumScore(value + other.value);
+			}
+			doSum(other);
 		}
 	}
+	
+	public void doSum(Field other) 
+	{
+		if (!hasValue()) setBuff(other.getBuff());
+		setValue(value += other.value);
+		other.setBuff(null);
+		other.setValue(0);
+	}
+	
+	
 	
 	public boolean hasValue() {
 		return (value != 0);
@@ -111,23 +143,19 @@ public class Field
 		return (this.getBuff() != null);
 	}
 	
-	
-	com.github.cliftonlabs.json_simple.JsonObject obj = new com.github.cliftonlabs.json_simple.JsonObject();
-	
-	public JsonObject saveField() {
-			
-		obj.put("value", getValue());
-			
-		
-		return obj;
+	public boolean canSum() {
+		return sum;
+	}
+	public void setSum(boolean sum) {
+		this.sum = sum;
 	}
 	
-	public JsonObject loadField() {
+	public String toString() {
+		String buff = "null";
+		String data = String.valueOf(value);
+		if (getBuff() != null) buff = getBuff().render();
 		
-		obj.get("value");
-		obj.get("buff");
+		return data + " " + buff;
 		
-		return obj;
 	}
-
 }

@@ -2,7 +2,6 @@ package Game;
 
 import java.util.Scanner;
 
-import com.github.cliftonlabs.json_simple.JsonObject;
 
 
 
@@ -14,6 +13,7 @@ public class Player
 	private Game game;
 	private boolean moveAffected;
 	private int score;
+	private Scanner scanner;
 	
 	public void languageMes() {
 		if (getGame().language != 1) System.out.println("lenguage cambiado a ESPAÑOL");
@@ -86,7 +86,7 @@ public class Player
 //		getMoves().setPlayer(this);
 //	}
 //	
-	public void movement() 
+	public void movement()
 	{
 		System.out.println("\t////////" + getName().toUpperCase() + "\\\\\\\\\\\\\\\\\\");
 		moves.consoleRender();
@@ -95,7 +95,7 @@ public class Player
 		boolean done2 = false;
 		
 		while (!done) {
-			Scanner scanner = new Scanner(System.in);
+			scanner = new Scanner(System.in);
 			String scan = scanner.nextLine().toLowerCase();
 			if (scan.isEmpty()) scan = "fff";
 			char movement = scan.charAt(0);
@@ -103,7 +103,6 @@ public class Player
 			if (movement == 'h') {
 				game.help(getGame().language);
 				movement();	
-				done = true;
 				done2 = true;
 			}
 					
@@ -153,15 +152,30 @@ public class Player
 				getGame().setForfeit(true);
 				}
 			
+			if (movement == 'x'){
+				getGame().saveGame();
+				done2 = true;
+				}
+			
+			if (movement == 'l'){
+				getGame().loadGame();
+				getMoves().consoleRender();
+				done2 = true;
+				done = true;
+				getGame().setForfeit(true);
+				}
+			
 			if (!done2) invalidMes();
 
 		}
-		moves.revertBlockedField();
-		setMoveAffected(false);
-		moves.fieldSpawner();
-		System.out.println("\t////////" + getName().toUpperCase() + "\\\\\\\\\\\\\\\\\\");
-		moves.consoleRender();
-		if (getGame().score_vis) scoreMes();
+		if (!getGame().isForfeit()) {
+			moves.revertBlockedField();
+			setMoveAffected(false);
+			moves.fieldSpawner();
+			System.out.println("\t////////" + getName().toUpperCase() + "\\\\\\\\\\\\\\\\\\");
+			moves.consoleRender();
+			if (getGame().score_vis) scoreMes();
+		}
 		System.out.println(
 				  "===============================================\n"
 				+ "===============================================\n"
@@ -171,20 +185,6 @@ public class Player
 	}
 
 	
-	
-	com.github.cliftonlabs.json_simple.JsonObject obj = new com.github.cliftonlabs.json_simple.JsonObject();
-	
-	public JsonObject savePlayer() {
-		obj.put("board", moves.saveBoard());
-		obj.put("name", getName());
-		return obj;
-	}
-	
-	public JsonObject loadPlayer() {
-		obj.get("name");
-		return obj;
-	}
-
 	public int getScore() {
 		return score;
 	}
@@ -196,6 +196,13 @@ public class Player
 	public void sumScore(int value) {
 		score += value;
 	}
+	
+	public void reset() {
+		setMoveAffected(false);
+		setScore(0);
+		setMoves(new Board(this));
+	}
+	
 
 
 }

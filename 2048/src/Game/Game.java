@@ -1,36 +1,46 @@
 package Game;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.Scanner;
-
+import com.github.cliftonlabs.json_simple.JsonArray;
 import com.github.cliftonlabs.json_simple.JsonObject;
 import com.github.cliftonlabs.json_simple.Jsoner;
 
 
+
+
 //tiene dos jugador. Tiene que poder iniciar una nueva partida, restartearla, cargar y guardar
 public class Game
+
 {
 	
 	private Player player1;
 	private Player player2;
 	private boolean forfeit;
 	int turn;
-	int language = 1;
+	int language = -1;
+	int score = 0;
 	boolean score_vis;
-	String win_mes = " HAS WON THE GAME";
-	String inv_mes = "invalid input";
-	String goa_mes = "imput a value between 100 and 1000";
-	String goa_inv = "value must be between 100 and 1000";
-	String tie_mes = "TIE";
-	String lb_mes = "LAST BREATH!";
-	String mode= "GAME MODES: \n"
-			+ "1 - highest score is the winner\n"
-			+ "2 - first to run out of moves is the looser";
+	String win_mes;
+	String inv_mes;
+	String goa_mes;
+	String goa_inv;
+	String tie_mes;
+	String lb_mes;
+	String mode;
+	String sav_mes;
+	String sav_err;
+	String sav_suc;
+	String loa_mes;
+	String loa_err;
+	String loa_suc;
+	String gam_mod_a;
+	String gam_mod_b;
+	String sco_thr;
+
 	
 	String help_en = "INSTRUCTIONS: \n"
 			+ "\nHow to Play:\n"
@@ -65,6 +75,8 @@ public class Game
 			+ "d - move right\n"
 			+ "h - press h at any time to bring up this menu\n"
 			+ "q - change language\n"
+			+ "x - save game\n"
+			+ "l - load game\n"
 			+ "n - start a new game\n";
 	String help_es = "INSTRUCCIONES: \n"
 			+ "\nComo jugar:\n"
@@ -99,7 +111,11 @@ public class Game
 			+ "d - mover hacia la derecha\n"
 			+ "h - presiona en cualquier momento para traer este menu\n"
 			+ "q - cambiar de idioma\n"
+			+ "x - guardar juego\n"
+			+ "l - cargar juego\n"
 			+ "n - nuevo juego\n";
+	
+	private Scanner scanner;
 
 	public Game() 
 	{
@@ -107,6 +123,7 @@ public class Game
 		player1.setName(player1.getName() + " 1");
 		player2 = new Player(this);
 		player2.setName(player2.getName() + " 2");
+		changeLanguage();
 		menu();
 	}
 	
@@ -126,6 +143,15 @@ public class Game
 			goa_inv = "el valor debe ser entre 100 y 1000";
 			tie_mes = "EMPATE";
 			lb_mes = "ULTIMO ALIENTO!";
+			sav_mes = "guardar Partida con el nombre:";
+			sav_err = "no se admiten espacios";
+			sav_suc = "partida guardada!";
+			loa_mes = "nombre del guardado:";
+			loa_err = "no hay tal guardado";
+			loa_suc = "partida cargada!";
+			gam_mod_a ="PARTIDA POR MOVIMIENTO";
+			gam_mod_b ="PARTIDA POR PUNTAJE";
+			sco_thr = "PUNTAJE DE BARRERA: ";
 		}
 		else {
 			player1.setName("Player 1");
@@ -141,16 +167,22 @@ public class Game
 			goa_inv = "value must be between 100 and 1000";
 			tie_mes = "TIE";
 			lb_mes = "LAST BREATH!";
+			sav_mes = "save game with name:";
+			sav_err = "no spaces allowed";
+			sav_suc = "game saved!";
+			loa_mes = "name of the save:";
+			loa_err = "no such save";
+			loa_suc = "game loaded!";
+			gam_mod_a ="MOVE GAME";
+			gam_mod_b ="SCORE GAME";
+			sco_thr = "SCORE THRESHHOLD: ";
 		}
 	}
 	
 	public void gamePlay_a() 
 	{
 		score_vis = false;
-		player1 = new Player(this);
-		player1.setName(player1.getName() + " 1");
-		player2 = new Player(this);
-		player2.setName(player2.getName() + " 2");
+		score = 0;
 		while ((!player1.getMoves().gameLost() && !player2.getMoves().gameLost()) && !isForfeit()) 
 		{
 				turn = turn*-1;
@@ -167,12 +199,9 @@ public class Game
 	
 	public void gamePlay_b(int goal) 
 	{
-		System.out.println(goal);
+		System.out.println(sco_thr + goal);
 		score_vis = true;
-		player1 = new Player(this);
-		player1.setName(player1.getName() + " 1");
-		player2 = new Player(this);
-		player2.setName(player2.getName() + " 2");
+		score = goal;
 		while ((player1.getScore()<goal && player2.getScore()<goal) && !isForfeit()) 
 		{
 				turn = turn*-1;
@@ -238,7 +267,7 @@ public class Game
 		boolean done = false;
 		boolean done2 = false;
 		while (!done) {
-			Scanner scanner = new Scanner(System.in);
+			scanner = new Scanner(System.in);
 			String scan = scanner.nextLine().toLowerCase();
 			if (scan.isEmpty()) scan = "fff";
 			char movement = scan.charAt(0);
@@ -260,19 +289,26 @@ public class Game
 				done = true;
 				done2 = true;
 			}
+			
+			if (movement == 'l') {
+				loadGame();
+				done2 = true;
+			}
 			if (!done2) System.out.println(inv_mes);
 		}
 	}
 	
 	public void gameMode()
 	{
+		player1.reset();
+		player2.reset();
 		setForfeit(false);
 		turn = -1;
 		System.out.println(mode);
 		boolean done = false;
 		boolean done2 = false;
 		while (!done) {
-			Scanner scanner = new Scanner(System.in);
+			scanner = new Scanner(System.in);
 			String scan = scanner.nextLine().toLowerCase();
 			if (scan.isEmpty()) scan = "fff";
 			char movement = scan.charAt(0);
@@ -303,8 +339,9 @@ public class Game
 		boolean done = false;
 		boolean done2 = false;
 		while (!done) {
-			Scanner scanner = new Scanner(System.in);
+			scanner = new Scanner(System.in);
 			String scan = scanner.nextLine().toLowerCase();
+			if (scan.isEmpty()) scan = "100";
 			char movement = scan.charAt(0);
 			int goal = Integer.parseInt(scan);
 			if (scan.isEmpty()) scan = "250";
@@ -325,81 +362,23 @@ public class Game
 			if (!done2) System.out.println(goa_inv);
 		}
 	}
-	
-	public JsonObject stringToJson() {
-		
-		JsonObject j = null;
-		try {
-		j = (JsonObject)Jsoner.deserialize(readText());
-		} catch(Exception e)  {
-			System.out.println("puto " + e.getMessage());
-		}
-		return j;
-		}
-	
-	public void guardarArchivo() {
-		try (PrintWriter out = new PrintWriter("partida.txt")) {
-		    out.println(saveGame());
-		} catch (FileNotFoundException e) {
-			System.out.println("no se pudo guardar el archivo");
-		}
-	}
-	
+
 	public Player getPlayer1() {
 		return player1;
 	}
+	
 	public void setPlayer1(Player player1) {
 		this.player1 = player1;
 	}
+	
 	public Player getPlayer2() {
 		return player2;
 	}
+	
 	public void setPlayer2(Player player2) {
 		this.player2 = player2;
 	}
-	
-	
-	public String saveGame() {
-		JsonObject obj = new JsonObject();
-		obj.put("player 1", player1.savePlayer());
-		obj.put("player 2", player2.savePlayer());
-		return Jsoner.serialize(obj);
-	}
-	
-//	public void loadGame(JsonObject obj) {
-//		try {
-//			this.setPlayer1(new Player((JsonObject) obj.get("player 1")));
-//			this.setPlayer2(new Player((JsonObject) obj.get("player 2")));
-//			this.getPlayer1().setGame(this);
-//			this.getPlayer2().setGame(this);
-//			this.getPlayer1().setName("player 1");
-//			this.getPlayer2().setName("player 2");
-//		} catch (Exception e) {
-//			System.out.println("game roto: " + e.getMessage());
-//			e.printStackTrace();
-//		}
-//	}
-	
-	public String readText() {
-		File file = new File("partida.txt"); 
-		  
-		  BufferedReader br = null;
-		try {
-			br = new BufferedReader(new FileReader(file));
-		} catch (FileNotFoundException e) {
-			System.out.println("no se encuentra el archivo");
-		} 
-		  
-		  String st = ""; 
-		  try {
-			while ((st = br.readLine()) != null) 
-			    System.out.println(st);
-		} catch (IOException e) {
-			System.out.println("no se encuentra el archivo");
-		}  
-		  return st;
-	}
-	
+
 	public void lastBreath(Player player) {
 		for (int a = 0; a<3 ; a++) {
 			player.movement();
@@ -417,9 +396,112 @@ public class Game
 	
 	
 	
+	public void saveGame()
 	
+	{
+		System.out.println(sav_mes);
+		scanner = new Scanner(System.in);
+		String scan = scanner.nextLine().toLowerCase();
+		
+		JsonObject save = new JsonObject();
+
+
+		JsonArray play1 = new JsonArray();
+		for (int a = 0 ; a<4 ; a ++) {
+			for (int b = 0; b<4 ; b ++) {
+				play1.add(player1.getMoves().getTable()[a][b].toString());
+			}
+		}
+		
+		JsonArray play2 = new JsonArray();
+		for (int a = 0 ; a<4 ; a ++) {
+			for (int b = 0; b<4 ; b ++) {
+				play2.add(player2.getMoves().getTable()[a][b].toString());
+			}
+		}
+		
+		save.put("player 1", play1);
+		save.put("player 2", play2);
+		save.put("p1_score", player1.getScore());
+		save.put("p2_score", player2.getScore());
+		save.put("turn", turn);
+		save.put("goal", score);
+		
+		
+		
+
+			
+		try {
+			FileWriter file = new FileWriter(scan +".txt");
+			file.write(save.toJson());
+			file.flush();
+			file.close();
+		} catch (IOException e) {
+			System.out.println(sav_err);
+		}
+
+			System.out.println(sav_suc);
+		
+	}
 	
+	public void loadGame() 
+	{
+	boolean err = false;
+	System.out.println(loa_mes);
+	scanner = new Scanner(System.in);
+	String scan = scanner.nextLine().toLowerCase();
 	
+	{
+    try {
+    	Object list = Jsoner.deserialize(new FileReader(scan + ".txt"));
+    	JsonObject obt = (JsonObject) list;
+    	player1.setScore(((BigDecimal) obt.get("p1_score")).intValue());
+    	player2.setScore(((BigDecimal) obt.get("p2_score")).intValue());
+    	turn = ((BigDecimal) obt.get("turn")).intValue()*-1;
+    	score = ((BigDecimal) obt.get("goal")).intValue();
+    	JsonArray play1_board = (JsonArray) obt.get("player 1");
+    	JsonArray play2_board = (JsonArray) obt.get("player 2");
+        int pos = -1;
+        player1.reset();
+        player2.reset();
+        
+        for (int a = 0; a <4 ; a++) {
+        	for (int b = 0; b<4 ; b++) {
+        		pos +=1;
+        		
+        		String full_1 = play1_board.getString(pos);
+        		String[] split_1 = full_1.split(" ");
+        		if (split_1[0].equals("B")) player1.getMoves().getTable()[a][b] = new PBlockedField(Integer.parseInt(split_1[1]), split_1[2]);
+        			else player1.getMoves().getTable()[a][b] = new Field(Integer.parseInt(split_1[0]),player1.getMoves(), split_1[1]);
+        		
+        		String full_2 = play2_board.getString(pos);
+        		String[] split_2 = full_2.split(" ");
+        		if (split_2[0].equals("B")) player2.getMoves().getTable()[a][b] = new PBlockedField(Integer.parseInt(split_2[1]), split_2[2]);
+        			else player2.getMoves().getTable()[a][b] = new Field(Integer.parseInt(split_2[0]),player2.getMoves(), split_2[1]);
+        		} 	
+        	}    
+        }
+
+	     catch (Exception e) {
+	        System.out.println(loa_err);
+	        err = true;
+    }
+    
+    if (!err) {
+	    if (score != 0) {
+	    	System.out.println(loa_suc);
+	    	System.out.println(gam_mod_b);
+	    	System.out.println(player1.getName() +": " + player1.getScore());
+	    	System.out.println(player2.getName() +": " + player2.getScore());
+	    	gamePlay_b(score);
 	
-	
+	    }
+	    else {
+	    	System.out.println(loa_suc);
+	    	System.out.println(gam_mod_a);
+	    	gamePlay_a();}
+    }
+}
+
+}
 }

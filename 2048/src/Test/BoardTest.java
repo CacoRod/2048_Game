@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import Game.Board;
 import Game.Field;
+import Game.Player;
 
 class BoardTest {
 	
@@ -20,7 +21,7 @@ class BoardTest {
 				{new Field(4,board),new Field(0,board),new Field(4,board),new Field(0,board)},
 				{new Field(0,board),new Field(0,board),new Field(8,board),new Field(8,board)}
 			};
-		board = new Board();
+		board = new Board(player);
 		board.setTable(table);
 	}
 
@@ -28,54 +29,7 @@ class BoardTest {
 	void tearDown() throws Exception {
 	}
 
-	@Test
-	void testSumLeft() {
-		 Field[][] table = 
-			  { {new Field(4,board),new Field(0,board),new Field(4,board),new Field(0,board)},
-				{new Field(2,board),new Field(0,board),new Field(0,board),new Field(0,board)},
-				{new Field(8,board),new Field(0,board),new Field(0,board),new Field(0,board)},
-				{new Field(0,board),new Field(0,board),new Field(16,board),new Field(0,board)}
-			};
-		board.sumLeft();
-		assertEquals(board.getTable(), table);
-		
-	}
-	@Test
-	void testSumRight() {
-		Field[][] table = 
-			{ 		{new Field(0,board),new Field(4,board),new Field(4,board),new Field(0,board)},
-					{new Field(2,board),new Field(0,board),new Field(0,board),new Field(0,board)},
-					{new Field(0,board),new Field(0,board),new Field(8,board),new Field(0,board)},
-					{new Field(0,board),new Field(0,board),new Field(0,board),new Field(16,board)}
-			};
-		board.sumRight();
-		assertEquals(board.getTable(), table);
-		
-	}
-	@Test
-	void testSumUp() {
-		Field[][] table = 
-			{ 		{new Field(4,board),new Field(2,board),new Field(8,board),new Field(0,board)},
-					{new Field(0,board),new Field(0,board),new Field(0,board),new Field(0,board)},
-					{new Field(4,board),new Field(0,board),new Field(0,board),new Field(0,board)},
-					{new Field(0,board),new Field(0,board),new Field(8,board),new Field(8,board)}
-			};
-		board.sumUp();
-		assertEquals(board.getTable(), table);
-		
-	}
-	@Test
-	void testSumDown() {
-		Field[][] table = 
-			  { {new Field(0,board),new Field(2,board),new Field(0,board),new Field(0,board)},
-				{new Field(4,board),new Field(0,board),new Field(0,board),new Field(0,board)},
-				{new Field(4,board),new Field(0,board),new Field(8,board),new Field(0,board)},
-				{new Field(0,board),new Field(0,board),new Field(8,board),new Field(8,board)}
-			};
-		board.sumDown();
-		assertEquals(board.getTable(), table);
-	}
-	
+
 	@Test
 	void testMoveLeft() {
 		 Field[][] table = 
@@ -278,4 +232,5 @@ class BoardTest {
 	}
 	
 	Board board;
+	Player player;
 }
